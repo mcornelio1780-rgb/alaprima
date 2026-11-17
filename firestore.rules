@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    // Reemplaza TU_CORREO@gmail.com por tu(s) correo(s) de administrador
+    function isAdmin() {
+      return signedIn() && request.auth.token.email_verified == true
+        && request.auth.token.email in ['TU_CORREO@gmail.com'];
+    }
+    function okStr(v, max) { return v is string && v.size() <= max; }
+
+    // Formulario de contacto / checklist gratis (cualquiera envía; solo admin lee)
+    match /leads/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name','email','country','city','profile','procedure','lang','source','consent','uid','ts'])
+        && okStr(request.resource.data.name, 120)
+        && okStr(request.resource.data.email, 200)
+        && request.resource.data.email.matches('.+@.+[.].+');
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Preguntas de la FAQ
+    match /questions/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name','email','question','lang','uid','ts'])
+        && okStr(request.resource.data.email, 200)
+        && okStr(request.resource.data.question, 2000);
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Perfil de usuario
+    match /users/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+      allow read: if isAdmin();
+    }
+
+    // Informes: cada usuario ve solo los suyos
+    match /reports/{id} {
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow read, update, delete: if signedIn() && resource.data.uid == request.auth.uid;
+      allow read: if isAdmin();
+    }
+
+    // Pedidos: el cliente crea y comparte documentos; el admin cambia estados
+    match /orders/{id} {
+      allow create: if signedIn() && request.auth.token.email_verified == true
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'checkout';
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      allow update: if signedIn() && resource.data.uid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','checkout_id','docs_link','notes','updated'])
+        && request.resource.data.status in ['checkout','paid_unverified','docs_sent'];
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

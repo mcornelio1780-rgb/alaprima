@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>alaprima · Pre-check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--cob:#2340D8;--deep:#142A8C;--gra:#14171F;--cal:#EEF0F3;--res:#F4E04D;--verde:#12A06B;--rojo:#D93A3A;--niebla:#C9D1E4;--t2:#4A5163;--amb:#9A7A00;
+--f:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:var(--f);background:var(--cal);color:var(--gra);font-size:16.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:focus-visible{outline:3px solid var(--res);outline-offset:2px;border-radius:6px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:#fff;border-bottom:1px solid #DDE2EC}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:11;background:#fff}
+.hd{display:flex;align-items:center;gap:18px;height:62px;width:min(1180px,100% - 32px);margin:auto}
+.hd .lg{width:120px;display:block;flex:none}
+.views{display:flex;gap:4px;margin-left:12px}
+.views button{border:0;background:none;font:inherit;font-weight:600;font-size:15px;padding:8px 12px;border-radius:10px;cursor:pointer;color:var(--t2)}
+.views button[aria-current=page]{background:var(--cal);color:var(--gra)}
+.lang{margin-left:auto;display:flex;border:1px solid var(--niebla);border-radius:999px;padding:3px}
+.lang button{border:0;background:none;font:inherit;font-size:12.5px;font-weight:700;padding:5px 9px;border-radius:999px;cursor:pointer;color:var(--t2)}
+.lang button[aria-pressed=true]{background:var(--gra);color:#fff}
+@media(max-width:760px){.views{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #DDE2EC;justify-content:space-around;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));margin:0;z-index:12}body{padding-bottom:70px}}
+.wrap{width:min(1180px,100% - 32px);margin:28px auto 80px}
+h1{font-size:clamp(30px,4vw,46px);letter-spacing:-.04em;line-height:1.02;margin:0 0 8px;font-weight:900}
+h2{font-size:24px;letter-spacing:-.02em;margin:0 0 12px}
+.muted{color:var(--t2)}
+.card{background:#fff;border:1px solid #DDE2EC;border-radius:20px;padding:24px}
+.stepper{display:flex;gap:6px;margin:22px 0}
+.stepper div{flex:1;height:6px;border-radius:4px;background:#DDE2EC}.stepper div.on{background:var(--cob)}
+.stepl{font-size:14px;color:var(--t2);font-weight:600}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+label.f{display:grid;gap:6px;font-size:14px;font-weight:600}
+input,select,textarea{font:inherit;font-size:16px;padding:11px 13px;border-radius:12px;border:1.5px solid #CDD3E0;background:#fff;color:var(--gra);width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--cob);outline:none;box-shadow:0 0 0 3px rgba(35,64,216,.18)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:12px;background:var(--cob);color:#fff;text-decoration:none;font-weight:700;font-size:15.5px;border:0;cursor:pointer;font-family:inherit}
+.btn:hover{background:var(--deep)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.l{background:#fff;color:var(--gra);border:1.5px solid #CDD3E0}.btn.l:hover{border-color:var(--gra)}
+.btn.y{background:var(--res);color:var(--gra)}
+.btn.sm{padding:8px 12px;font-size:14px;border-radius:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.procs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:16px}
+.proc{text-align:left;font:inherit;background:#fff;border:1.5px solid #DDE2EC;border-radius:16px;padding:16px;cursor:pointer;color:inherit}
+.proc:hover{border-color:var(--cob)}.proc[aria-pressed=true]{border-color:var(--cob);box-shadow:0 0 0 3px rgba(35,64,216,.15)}
+.proc b{display:block;font-size:16.5px;letter-spacing:-.01em}.proc small{color:var(--t2)}
+.drop{border:2px dashed var(--niebla);border-radius:18px;padding:30px;text-align:center;background:#F8F9FB;cursor:pointer}
+.drop.over{border-color:var(--cob);background:#EEF1FD}
+.req{display:grid;grid-template-columns:28px 1fr 220px;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #EEF0F4}
+@media(max-width:760px){.req{grid-template-columns:28px 1fr}.req select{grid-column:2}}
+.req .g{font-size:13px;color:var(--t2)}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--cal);color:var(--t2);margin-left:6px}
+.pill.crit{background:#FBE9E9;color:#9B1C1C}
+.q{padding:14px 0;border-bottom:1px solid #EEF0F4}
+.seg{display:inline-flex;border:1.5px solid #CDD3E0;border-radius:10px;overflow:hidden;margin-top:8px}
+.seg button{border:0;background:#fff;font:inherit;font-size:14px;font-weight:600;padding:7px 14px;cursor:pointer;color:var(--t2)}
+.seg button+button{border-left:1.5px solid #CDD3E0}
+.seg button[aria-pressed=true][data-v=yes]{background:#E5F5EE;color:#0B6B47}
+.seg button[aria-pressed=true][data-v=no]{background:#FBE9E9;color:#9B1C1C}
+.seg button[aria-pressed=true][data-v=unk]{background:#FFF7D1;color:#6B5600}
+.nav{display:flex;justify-content:space-between;margin-top:22px;gap:10px}
+/* report */
+.rep{display:grid;grid-template-columns:320px 1fr;gap:20px}@media(max-width:900px){.rep{grid-template-columns:1fr}}
+.score{font-size:76px;font-weight:900;letter-spacing:-.06em;line-height:1}
+.meter{height:12px;background:#E4E8F0;border-radius:6px;overflow:hidden;margin:12px 0}.meter i{display:block;height:100%;background:var(--verde);transition:width .8s}
+.fi{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:13px 0;border-top:1px solid #EEF0F4}
+.st{font-size:13px;font-weight:800}.st.m{color:var(--rojo)}.st.p{color:var(--amb)}.st.ok{color:var(--verde)}.st.v{color:var(--cob)}
+.fix{font-size:14.5px;color:var(--t2);margin-top:3px}
+.morphwrap{width:84px}.morph{transform-box:fill-box;transform-origin:50% 50%;animation:morph 2.2s cubic-bezier(.75,0,.2,1) .2s both}
+@keyframes morph{0%,15%{transform:scaleX(-1) rotate(138.9deg)}100%{transform:none}}
+.notice{background:#FFF7D1;border-radius:12px;padding:12px 14px;font-size:14.5px;color:#5A4800}
+.err{background:#FBE9E9;border-radius:12px;padding:12px 14px;font-size:14.5px;color:#9B1C1C}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:9px 10px;border-bottom:1px solid #EEF0F4;vertical-align:top}th{background:#F6F7FA;position:sticky;top:0}
+.tw{overflow:auto;max-height:520px;border:1px solid #DDE2EC;border-radius:14px;background:#fff}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}@media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{background:#fff;border:1px solid #DDE2EC;border-radius:16px;padding:16px}.kpi b{display:block;font-size:32px;letter-spacing:-.04em;font-weight:900}
+.hide{display:none!important}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--gra);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:30}.toast.on{opacity:1}
+@media print{header,.noprint,.views,.toast{display:none!important}body{background:#fff}.wrap{margin:0;width:100%}.card{border:0;padding:0}.rep{grid-template-columns:1fr}}
+
+.lang{margin-left:auto}
+#acct{display:flex;align-items:center}
+.buy{background:#EEF1FD;border-radius:14px;padding:14px 16px;margin:12px 0}
+.buy p{margin:4px 0 10px;font-size:14.5px;color:var(--t2)}
+.buyrow{display:flex;flex-direction:column;gap:8px}
+.gate{position:relative;margin-top:4px}
+.gate-blur{filter:blur(5px);pointer-events:none;user-select:none;opacity:.7}
+.gate-box{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(rgba(255,255,255,.4),#fff 55%);padding:20px;gap:6px}
+.gate-box p{margin:0 0 8px;color:var(--t2);max-width:40ch}
+.olist{display:grid;gap:12px;margin-top:16px}
+.ocard{background:#fff;border:1px solid #DDE2EC;border-radius:18px;padding:18px 20px}
+.hl-card{border:2px solid var(--verde);box-shadow:0 0 0 4px rgba(18,160,107,.12)}
+.docs{border-top:1px solid #EEF0F4;padding-top:12px;margin-top:4px}
+.badge{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--cal);color:var(--t2);white-space:nowrap}
+.b-paid_unverified,.b-docs_sent{background:#E5F5EE;color:#0B6B47}.b-in_review{background:#EEF1FD;color:var(--deep)}.b-delivered{background:var(--verde);color:#fff}.b-checkout{background:#FFF7D1;color:#6B5600}.b-refunded,.b-cancelled{background:#FBE9E9;color:#9B1C1C}
+.ok-banner{background:#E5F5EE;color:#0B4F35;border-radius:14px;padding:14px 16px;font-weight:600;margin-top:14px}
+.subtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.subtabs button{border:1.5px solid var(--niebla);background:#fff;font:inherit;font-size:14.5px;font-weight:600;padding:8px 14px;border-radius:999px;cursor:pointer}
+.subtabs button[aria-selected=true]{background:var(--gra);color:#fff;border-color:var(--gra)}
+.needlogin h2{margin-top:0}
+@media(max-width:760px){.apc-local{bottom:calc(80px + env(safe-area-inset-bottom,0px))!important}}
+.foot{margin-top:60px;font-size:13px;color:var(--t2);line-height:1.8}
+.foot a{color:var(--t2)}
+@media(max-width:760px){.hd{gap:10px}.hd .lg{width:100px}}
+@media print{header,.noprint,.views,.toast,.apc-local,#acct{display:none!important}body{background:#fff}.wrap{margin:0;width:100%}.card{border:0;padding:0}.rep{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="hd">
+ <a href="index.html" class="lg" data-logo="hz" aria-label="alaprima"></a>
+ <nav class="views" aria-label="Secciones">
+  <button data-view="check" data-i="v_check"></button><button data-view="reports" data-i="v_hist"></button><button data-view="orders" data-i="v_orders"></button><button data-view="admin" data-i="v_admin" class="hide" id="navAdmin"></button>
+ </nav>
+ <div class="lang" role="group" aria-label="Idioma"><button data-l="es">ES</button><button data-l="en">EN</button><button data-l="pt">PT</button><button data-l="fr">FR</button></div>
+ <span id="acct"></span>
+</div></header>
+
+<div class="wrap">
+<!-- ============ NUEVA REVISIÓN ============ -->
+<section id="v-check">
+ <p class="stepl" id="stepLabel"></p>
+ <div class="stepper" id="stepper"><div></div><div></div><div></div><div></div></div>
+ <div id="s1">
+  <h1 data-i="s1_h"></h1><p class="muted" data-i="s1_p"></p>
+  <div class="procs" id="procs"></div>
+  <div class="grid2" style="margin-top:18px">
+   <label class="f"><span data-i="lbl_city"></span><input id="city" placeholder="Miraflores, Lima"></label>
+   <label class="f"><span data-i="lbl_project"></span><input id="project" placeholder=""></label>
+  </div>
+  <div class="nav"><span></span><button class="btn" id="to2" disabled data-i="next"></button></div>
+ </div>
+ <div id="s2" class="hide">
+  <h1 data-i="s2_h"></h1><p class="muted" data-i="s2_p"></p>
+  <div class="drop" id="drop" tabindex="0" role="button"><b data-i="drop"></b><br><span class="muted" data-i="drop2"></span><input type="file" id="files" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.dwg" class="hide"></div>
+  <p class="muted" id="fileCount" style="font-size:14px"></p>
+  <div class="card" style="margin-top:12px"><div id="reqs"></div></div>
+  <div class="nav"><button class="btn l" data-back="1" data-i="back"></button><button class="btn" id="to3" data-i="next"></button></div>
+ </div>
+ <div id="s3" class="hide">
+  <h1 data-i="s3_h"></h1><p class="muted" data-i="s3_p"></p>
+  <div class="card"><div id="qs"></div></div>
+  <div class="nav"><button class="btn l" data-back="2" data-i="back"></button><button class="btn" id="to4" data-i="see_report"></button></div>
+ </div>
+ <div id="s4" class="hide">
+  <div class="row noprint" style="justify-content:space-between;margin-bottom:14px"><h1 data-i="s4_h" style="margin:0"></h1>
+   <div class="row"><button class="btn l sm hide" id="aiBtn" data-i="ai_btn"></button><button class="btn l sm" id="pdfBtn" data-i="pdf"></button><button class="btn l sm" id="newBtn" data-i="new"></button></div></div>
+  <div id="aiStatus" class="noprint" style="margin-bottom:12px"></div>
+  <div class="rep">
+   <div class="card">
+    <div class="row" style="justify-content:space-between"><span data-logo="hz" style="width:110px;display:block"></span><span class="muted" id="repId" style="font-size:13px"></span></div>
+    <div class="morphwrap" id="morph" style="margin:18px 0 6px"></div>
+    <div class="muted" data-i="readiness"></div>
+    <div class="score" id="score"></div>
+    <div class="meter"><i id="meterI" style="width:0"></i></div>
+    <div id="sumLine" style="font-weight:600"></div>
+    <p class="muted" id="repMeta" style="font-size:14px"></p>
+    <div class="buy noprint" id="upsell"></div>
+    <p class="muted" style="font-size:12.5px" data-i="disclaimer"></p>
+   </div>
+   <div class="card"><h2 data-i="findings"></h2><div id="findings"></div></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ MIS INFORMES ============ -->
+<section id="v-reports" class="hide">
+ <h1 data-i="hist_h"></h1><p class="muted" data-i="hist_p"></p>
+ <div class="needlogin hide card" style="margin-top:16px"></div>
+ <div class="tw" style="margin-top:16px"><table><thead><tr><th>ID</th><th data-i="th_date"></th><th data-i="th_proc"></th><th data-i="th_city"></th><th>%</th><th></th></tr></thead><tbody id="histBody"></tbody></table></div>
+</section>
+
+<!-- ============ MIS PEDIDOS ============ -->
+<section id="v-orders" class="hide">
+ <h1 data-i="orders_h"></h1><p class="muted" data-i="orders_p"></p>
+ <div id="paidBanner"></div>
+ <div class="needlogin hide card" style="margin-top:16px"></div>
+ <div id="ordersList" class="olist"></div>
+</section>
+
+<!-- ============ PANEL ADMIN ============ -->
+<section id="v-admin" class="hide">
+ <h1 data-i="adm_h"></h1><p class="muted" data-i="adm_p"></p>
+ <div class="kpis" style="margin:16px 0" id="admKpis"></div>
+ <div class="subtabs" role="tablist" id="admTabs"></div>
+ <div id="adm-orders" class="admp"></div>
+ <div id="adm-leads" class="admp hide"></div>
+ <div id="adm-questions" class="admp hide"></div>
+ <div id="adm-outreach" class="admp hide">
+  <div class="kpis" style="margin:0 0 16px" id="kpis"></div>
+  <div class="card">
+   <div class="row">
+    <label class="btn l sm" style="cursor:pointer"><span data-i="import_csv"></span><input type="file" id="csvIn" accept=".csv" class="hide"></label>
+    <select id="fCountry" style="width:auto"></select><select id="fStatus" style="width:auto"></select>
+    <input id="fSearch" style="width:200px" placeholder="🔎">
+    <button class="btn l sm" id="expCsv" data-i="export_csv"></button>
+    <span class="muted" style="font-size:13.5px" id="todayCount"></span>
+   </div>
+   <p class="notice" style="margin-top:14px" data-i="out_rules"></p>
+   <div class="tw" style="margin-top:12px"><table><thead><tr><th data-i="th_lead"></th><th data-i="th_email"></th><th data-i="th_city"></th><th data-i="th_lang"></th><th data-i="th_status"></th><th></th></tr></thead><tbody id="leadBody"></tbody></table></div>
+   <p class="muted" style="font-size:13px" id="leadPager"></p>
+  </div>
+ </div>
+ <div id="adm-settings" class="admp hide">
+  <div class="grid2">
+   <div class="card"><h2 data-i="ai_cfg"></h2>
+    <label class="f"><span>Anthropic API key</span><input id="apiKey" type="password" autocomplete="off" placeholder="sk-ant-..."></label>
+    <label class="f" style="margin-top:10px"><span data-i="model"></span><input id="model" value="claude-sonnet-4-6"></label>
+    <div class="row" style="margin-top:12px"><button class="btn sm" id="saveKey" data-i="save"></button><button class="btn l sm" id="clearKey" data-i="clear"></button></div>
+    <p class="muted" style="font-size:13.5px" data-i="ai_note"></p></div>
+   <div class="card"><h2 data-i="sender"></h2>
+    <label class="f"><span data-i="sender"></span><textarea id="sender" rows="3" placeholder="Michell Anyosa · alaprima"></textarea></label>
+    <div class="row" style="margin-top:12px"><button class="btn sm" id="saveSender" data-i="save"></button></div>
+    <h2 style="margin-top:22px" data-i="data_h"></h2><p class="muted" data-i="data_p"></p>
+    <div class="row"><button class="btn l sm" id="expAll" data-i="export_all"></button><label class="btn l sm" style="cursor:pointer"><span data-i="import_all"></span><input type="file" id="impAll" accept=".json" class="hide"></label></div></div>
+  </div>
+ </div>
+</section>
+<footer class="foot noprint"><a class="lg-link" data-h="terminos" data-i="lg_terms"></a> · <a class="lg-link" data-h="privacidad" data-i="lg_priv"></a> · <a class="lg-link" data-h="ia" data-i="lg_ai"></a><br><span data-i="foot_co"></span> Limly LLC · 8 The Green, Suite B, Dover, DE 19901, USA</footer>
+</div>
+<div class="toast" id="toast"></div>
+<script src="assets/config.js"></script>
+<script src="assets/brand.js"></script>
+<script src="assets/core.js"></script>
+<script>
+/* ================= CATÁLOGO DE TRÁMITES =================
+   o = nombre oficial (idioma local), en = glosa en inglés, k = palabras clave para reconocer archivos, c = crítico
+   Edita/añade trámites aquí. Verifica siempre contra el TUPA/ordenanza/código vigente de cada ciudad. */
+const PROCS=[
+{id:'PE-LF',flag:'🇵🇪',loc:'es',kind:'local',t:{es:'Licencia de funcionamiento (riesgo bajo/medio)',en:'Business operating license (low/medium risk)',pt:'Licença de funcionamento (risco baixo/médio)',fr:'Licence d’exploitation (risque faible/moyen)'},place:'Lima · Perú',
+ reqs:[
+ {id:'sol',o:'Formato de solicitud con declaración jurada',en:'Application form with sworn statement',k:['solicitud','formato','declaracion','dj','formulario'],c:1},
+ {id:'ruc',o:'RUC activo y habido',en:'Active tax ID (RUC)',k:['ruc','sunat','ficha'],c:1},
+ {id:'dni',o:'DNI del titular o representante legal',en:'ID of owner/legal representative',k:['dni','ce','pasaporte','identidad'],c:1},
+ {id:'pod',o:'Vigencia de poder (persona jurídica)',en:'Power of attorney (legal entity)',k:['vigencia','poder','sunarp','representante'],c:0,opt:1},
+ {id:'djs',o:'Declaración jurada de cumplimiento de condiciones de seguridad',en:'Sworn statement of safety conditions',k:['seguridad','condiciones','defensa','itse','indeci'],c:1},
+ {id:'zon',o:'Compatibilidad de uso / zonificación',en:'Zoning use compatibility',k:['zonificacion','compatibilidad','uso','parametros'],c:0},
+ {id:'pla',o:'Croquis o plano de ubicación y distribución',en:'Location and layout sketch/plan',k:['plano','croquis','ubicacion','distribucion','layout'],c:0},
+ {id:'aut',o:'Autorización sectorial (si el giro la exige)',en:'Sector authorization (if activity requires it)',k:['sectorial','digesa','minsa','minedu','autorizacion'],c:0,opt:1},
+ {id:'pag',o:'Comprobante de pago del derecho de trámite',en:'Proof of fee payment',k:['pago','recibo','voucher','comprobante','tasa'],c:0}],
+ qs:[
+ {id:'q1',o:'¿El área del local en el formulario coincide exactamente con el plano?',en:'Does the area on the form exactly match the plan?',obs:'Observación probable: diferencia de área entre formulario y plano.',fix:'Unifica el metraje en formulario, plano y contrato de alquiler.'},
+ {id:'q2',o:'¿El giro está permitido en la zonificación del predio?',en:'Is the activity allowed under the zoning?',obs:'Riesgo de improcedencia: giro no compatible con la zonificación.',fix:'Consulta el índice de usos de tu distrito antes de presentar.'},
+ {id:'q3',o:'¿El nivel de riesgo declarado corresponde al giro y al área (sin necesidad de ITSE previa)?',en:'Does the declared risk level match the activity and area?',obs:'Observación probable: nivel de riesgo mal clasificado (podría requerir ITSE previa).',fix:'Revisa la matriz de riesgos y el área máxima para riesgo bajo/medio.'},
+ {id:'q4',o:'¿La vigencia de poder tiene menos de 30 días?',en:'Is the power of attorney less than 30 days old?',obs:'Observación probable: vigencia de poder con antigüedad mayor a la aceptada.',fix:'Pide una nueva vigencia de poder en SUNARP.'},
+ {id:'q5',o:'¿El plano tiene escala, norte, cotas y firma?',en:'Does the plan have scale, north arrow, dimensions and signature?',obs:'Observación probable: plano sin escala, norte o cotas.',fix:'Agrega escala gráfica, flecha de norte y cotas principales.'}]},
+{id:'PE-LE',flag:'🇵🇪',loc:'es',kind:'obra',t:{es:'Licencia de edificación (Modalidad A/B)',en:'Building permit (Modality A/B)',pt:'Licença de edificação (Modalidade A/B)',fr:'Permis de construire (modalité A/B)'},place:'Lima · Perú',
+ reqs:[
+ {id:'fue',o:'FUE – Formulario Único de Edificación firmado',en:'Unified building form (FUE), signed',k:['fue','formulario','unico','edificacion'],c:1},
+ {id:'par',o:'Partida registral / copia literal del predio',en:'Property title record',k:['partida','copia literal','registral','sunarp','literal'],c:1},
+ {id:'cpu',o:'Certificado de parámetros urbanísticos y edificatorios',en:'Zoning and building parameters certificate',k:['parametros','urbanisticos','cpue','certificado'],c:1},
+ {id:'hab',o:'Declaración jurada de habilitación de profesionales',en:'Professionals’ license sworn statement',k:['habilitacion','colegiatura','cap','cip','habil'],c:1},
+ {id:'ubi',o:'Plano de ubicación y localización',en:'Location plan',k:['ubicacion','localizacion','u-01','ul'],c:1},
+ {id:'arq',o:'Planos de arquitectura (plantas, cortes, elevaciones)',en:'Architectural drawings',k:['arquitectura','planta','corte','elevacion','a-0','arq'],c:1},
+ {id:'est',o:'Planos de estructuras y memoria de cálculo',en:'Structural drawings and calcs',k:['estructura','estructural','e-0','calculo','cimentacion'],c:1},
+ {id:'ins',o:'Planos de instalaciones sanitarias y eléctricas',en:'Plumbing and electrical drawings',k:['sanitaria','electrica','ie-','is-','instalaciones'],c:0},
+ {id:'mem',o:'Memoria descriptiva',en:'Descriptive report',k:['memoria','descriptiva'],c:0},
+ {id:'ems',o:'Estudio de mecánica de suelos (si aplica)',en:'Soil study (if applicable)',k:['suelos','ems','geotecnico','mecanica'],c:0,opt:1},
+ {id:'pag',o:'Pago por derecho de trámite',en:'Fee payment',k:['pago','recibo','voucher'],c:0}],
+ qs:[
+ {id:'q1',o:'¿El certificado de parámetros está vigente a la fecha de ingreso?',en:'Is the parameters certificate valid on the filing date?',obs:'Observación probable: certificado de parámetros vencido.',fix:'Tramita uno nuevo antes de ingresar.'},
+ {id:'q2',o:'¿Altura, retiros y coeficiente de edificación cumplen los parámetros?',en:'Do height, setbacks and FAR meet the parameters?',obs:'Observación probable: incumplimiento de altura, retiro o coeficiente.',fix:'Compara el cuadro normativo del plano con el certificado.'},
+ {id:'q3',o:'¿El área techada coincide en FUE, planos y memoria?',en:'Does built area match across form, plans and report?',obs:'Observación probable: áreas inconsistentes entre documentos.',fix:'Genera un cuadro de áreas único y cópialo a todos los documentos.'},
+ {id:'q4',o:'¿Todos los planos tienen escala, rotulado, sello y firma del profesional?',en:'Are all drawings scaled, titled, stamped and signed?',obs:'Observación probable: planos sin rótulo, sello o firma.',fix:'Revisa el membrete de cada lámina.'},
+ {id:'q5',o:'¿El titular registral coincide con el solicitante?',en:'Does the registered owner match the applicant?',obs:'Observación probable: titularidad no acreditada.',fix:'Adjunta documento que acredite el derecho a edificar.'}]},
+{id:'US-ADU',flag:'🇺🇸',loc:'en',kind:'obra',t:{es:'ADU / ampliación residencial',en:'ADU / residential addition',pt:'ADU / ampliação residencial',fr:'ADU / extension résidentielle'},place:'CA · TX · FL',
+ reqs:[
+ {id:'app',o:'Permit application form',en:'Permit application form',k:['application','form','permit app'],c:1},
+ {id:'own',o:'Owner authorization / proof of ownership',en:'Owner authorization',k:['owner','authorization','deed','ownership'],c:1},
+ {id:'site',o:'Site plan with setbacks, easements and existing structures',en:'Site plan',k:['site','plot','a0','a1.0','setback'],c:1},
+ {id:'fp',o:'Floor plans to scale',en:'Floor plans',k:['floor','plan','a2','layout'],c:1},
+ {id:'elev',o:'Exterior elevations and sections',en:'Elevations and sections',k:['elevation','section','a3','a4'],c:1},
+ {id:'str',o:'Structural plans and stamped calculations',en:'Structural plans/calcs',k:['structural','calc','s1','s-1','framing','foundation'],c:1},
+ {id:'en',o:'Energy compliance (Title 24 in CA / IECC)',en:'Energy compliance',k:['title 24','t24','energy','iecc','cf1r'],c:0},
+ {id:'mep',o:'Mechanical, electrical and plumbing plans',en:'MEP plans',k:['mep','electrical','plumbing','mechanical','e1','p1','m1'],c:0},
+ {id:'lic',o:'Contractor license and insurance info',en:'Contractor license',k:['license','cslb','insurance','contractor'],c:0},
+ {id:'util',o:'Utility / sewer capacity or will-serve letters',en:'Utility letters',k:['utility','sewer','will serve','water'],c:0,opt:1}],
+ qs:[
+ {id:'q1',o:'Are all setbacks to property lines dimensioned on the site plan?',en:'Are all setbacks dimensioned?',obs:'Likely correction: setbacks not dimensioned.',fix:'Dimension every setback from the ADU to property lines and other structures.'},
+ {id:'q2',o:'Do square footages match across application, plans and energy forms?',en:'Do square footages match?',obs:'Likely correction: inconsistent square footage.',fix:'Use one area table and copy it everywhere.'},
+ {id:'q3',o:'Are smoke/CO alarms and egress windows shown for every sleeping room?',en:'Smoke/CO and egress shown?',obs:'Likely correction: missing smoke/CO alarms or egress dimensions.',fix:'Add alarm locations and egress window sizes to the floor plan.'},
+ {id:'q4',o:'Is fire separation shown where the ADU is close to the main house or property line?',en:'Fire separation shown?',obs:'Likely correction: fire-rated walls/openings not specified.',fix:'Specify rated assemblies per the local code.'},
+ {id:'q5',o:'Are drawings stamped where the jurisdiction requires it?',en:'Stamped where required?',obs:'Likely correction: missing professional stamp.',fix:'Confirm stamp requirements with the city’s submittal checklist.'}]},
+{id:'FR-PC',flag:'🇫🇷',loc:'fr',kind:'obra',t:{es:'Permiso de construir / declaración previa (vivienda)',en:'Building permit / prior declaration (house)',pt:'Licença de construção / declaração prévia',fr:'Permis de construire / déclaration préalable (maison)'},place:'France',
+ reqs:[
+ {id:'cerfa',o:'Formulaire Cerfa (13406 PCMI ou 13703 DP) complet et signé',en:'Cerfa form, complete and signed',k:['cerfa','13406','13703','formulaire'],c:1},
+ {id:'p1',o:'PCMI1 / DP1 Plan de situation',en:'Location plan',k:['pcmi1','dp1','situation'],c:1},
+ {id:'p2',o:'PCMI2 / DP2 Plan de masse coté',en:'Dimensioned site plan',k:['pcmi2','dp2','masse'],c:1},
+ {id:'p3',o:'PCMI3 / DP3 Plan en coupe du terrain',en:'Cross-section',k:['pcmi3','dp3','coupe'],c:1},
+ {id:'p4',o:'PCMI4 Notice descriptive',en:'Descriptive notice',k:['pcmi4','notice'],c:0},
+ {id:'p5',o:'PCMI5 / DP4 Plans des façades et toitures',en:'Façades and roofs',k:['pcmi5','dp4','facade','toiture'],c:1},
+ {id:'p6',o:'PCMI6 / DP6 Document graphique d’insertion',en:'Visual insertion',k:['pcmi6','dp6','insertion','graphique'],c:0},
+ {id:'p78',o:'PCMI7-8 / DP7-8 Photos environnement proche et lointain',en:'Near and far photos',k:['pcmi7','pcmi8','dp7','dp8','photo'],c:0},
+ {id:'re',o:'Attestation RE2020 (PCMI14-1) si construction neuve',en:'RE2020 energy certificate (new build)',k:['re2020','pcmi14','attestation','thermique'],c:0,opt:1}],
+ qs:[
+ {id:'q1',o:'Le plan de masse indique-t-il les cotes en 3 dimensions et les distances aux limites ?',en:'Site plan dimensioned incl. distances to boundaries?',obs:'Pièce probablement demandée : plan de masse incomplet (cotes, limites).',fix:'Ajoutez distances aux limites, hauteurs et accès.'},
+ {id:'q2',o:'Les points de prise de vue PCMI7/PCMI8 sont-ils reportés sur le plan de masse ?',en:'Photo viewpoints marked on site plan?',obs:'Pièce probablement demandée : angles de prise de vue absents.',fix:'Reportez les angles sur PCMI1 et PCMI2.'},
+ {id:'q3',o:'La surface de plancher déclarée correspond-elle aux plans ?',en:'Declared floor area matches drawings?',obs:'Incohérence probable de surface de plancher.',fix:'Recalculez la surface de plancher selon la définition officielle.'},
+ {id:'q4',o:'Le projet respecte-t-il le PLU (hauteur, implantation, aspect extérieur) ?',en:'Complies with the local plan (PLU)?',obs:'Risque de refus : non-conformité au PLU.',fix:'Relisez le règlement de la zone du PLU.'},
+ {id:'q5',o:'Le recours à un architecte est-il respecté (au-delà de 150 m²) ?',en:'Architect required above 150 m² respected?',obs:'Risque d’irrecevabilité : recours à l’architecte obligatoire.',fix:'Faites signer le projet par un architecte si le seuil est dépassé.'}]},
+{id:'BR-SP',flag:'🇧🇷',loc:'pt',kind:'obra',t:{es:'Alvará de aprobación / ejecución (residencial)',en:'Building approval permit (residential)',pt:'Alvará de aprovação e execução (residencial)',fr:'Alvará d’approbation et d’exécution'},place:'São Paulo · Brasil',
+ reqs:[
+ {id:'req',o:'Requerimento / formulário assinado',en:'Signed application',k:['requerimento','formulario'],c:1},
+ {id:'art',o:'ART ou RRT do responsável técnico',en:'ART/RRT professional responsibility',k:['art','rrt','crea','cau'],c:1},
+ {id:'mat',o:'Matrícula atualizada do imóvel',en:'Updated property registration',k:['matricula','cartorio','registro'],c:1},
+ {id:'iptu',o:'IPTU / notificação com SQL',en:'Property tax record',k:['iptu','sql','cadastro'],c:1},
+ {id:'proj',o:'Projeto arquitetônico (peças gráficas)',en:'Architectural drawings',k:['projeto','planta','arquitetonico','prancha'],c:1},
+ {id:'mem',o:'Memorial descritivo',en:'Descriptive memorial',k:['memorial','descritivo'],c:0},
+ {id:'doc',o:'Documento do proprietário / contrato social',en:'Owner ID / company deed',k:['rg','cpf','cnpj','contrato social'],c:0},
+ {id:'tax',o:'Guias de taxas pagas',en:'Fees paid',k:['taxa','guia','boleto','dam'],c:0}],
+ qs:[
+ {id:'q1',o:'A matrícula foi emitida há menos de 30 dias?',en:'Registration issued within 30 days?',obs:'Exigência provável: matrícula desatualizada.',fix:'Peça certidão atualizada no cartório.'},
+ {id:'q2',o:'A área construída bate entre projeto, memorial e requerimento?',en:'Built area consistent?',obs:'Exigência provável: áreas divergentes.',fix:'Use um quadro de áreas único.'},
+ {id:'q3',o:'Recuos, taxa de ocupação e coeficiente atendem ao zoneamento?',en:'Setbacks, coverage and FAR meet zoning?',obs:'Exigência provável: parâmetros de zoneamento.',fix:'Confira a lei de zoneamento da quadra.'},
+ {id:'q4',o:'As pranchas têm carimbo, escala e assinaturas?',en:'Sheets titled, scaled, signed?',obs:'Exigência provável: carimbo ou assinatura ausente.',fix:'Revise o carimbo de cada prancha.'}]},
+{id:'MX-CDMX',flag:'🇲🇽',loc:'es',kind:'obra',t:{es:'Manifestación de construcción (tipo A/B)',en:'Construction filing (type A/B)',pt:'Manifestação de construção (tipo A/B)',fr:'Déclaration de construction (type A/B)'},place:'Ciudad de México',
+ reqs:[
+ {id:'fmt',o:'Formato de registro de manifestación',en:'Official filing form',k:['formato','manifestacion','registro'],c:1},
+ {id:'uso',o:'Certificado único de zonificación de uso del suelo',en:'Land-use zoning certificate',k:['uso de suelo','zonificacion','certificado','cuzus'],c:1},
+ {id:'ali',o:'Constancia de alineamiento y número oficial',en:'Alignment and official number',k:['alineamiento','numero oficial'],c:1},
+ {id:'dro',o:'Responsiva del DRO y corresponsables (tipo B)',en:'Responsible director sign-off',k:['dro','responsiva','corresponsable'],c:1},
+ {id:'pla',o:'Planos arquitectónicos, estructurales e instalaciones',en:'Architectural, structural and MEP drawings',k:['plano','arquitectonico','estructural','instalaciones'],c:1},
+ {id:'mem',o:'Memoria descriptiva y de cálculo',en:'Descriptive and calc report',k:['memoria','calculo'],c:0},
+ {id:'pro',o:'Acreditación de propiedad / escritura',en:'Proof of ownership',k:['escritura','propiedad','predial'],c:0},
+ {id:'der',o:'Pago de derechos',en:'Fees paid',k:['pago','derechos','linea de captura'],c:0}],
+ qs:[
+ {id:'q1',o:'¿El certificado de uso de suelo permite el uso y número de niveles?',en:'Zoning certificate allows use and levels?',obs:'Prevención probable: uso o niveles no permitidos.',fix:'Revisa el certificado antes de diseñar niveles extra.'},
+ {id:'q2',o:'¿Las superficies coinciden entre formato, planos y memoria?',en:'Areas consistent?',obs:'Prevención probable: superficies inconsistentes.',fix:'Cuadro de áreas único.'},
+ {id:'q3',o:'¿El DRO firmó todos los planos y la responsiva está vigente?',en:'DRO signed all drawings?',obs:'Prevención probable: falta firma o registro vigente del DRO.',fix:'Valida el registro del DRO.'}]},
+{id:'GEN',flag:'🌎',loc:'en',kind:'local',t:{es:'Otro trámite (checklist general)',en:'Other permit (general checklist)',pt:'Outro processo (checklist geral)',fr:'Autre démarche (checklist générale)'},place:'Global',
+ reqs:[
+ {id:'form',o:'Official application form',en:'Official application form',k:['form','formulario','solicitud','requerimento','cerfa'],c:1},
+ {id:'id',o:'Applicant ID / company registration',en:'Applicant ID',k:['id','dni','passport','rut','cnpj','ruc'],c:1},
+ {id:'prop',o:'Proof of ownership or lease',en:'Ownership or lease',k:['lease','deed','alquiler','arriendo','escritura','matricula'],c:1},
+ {id:'plan',o:'Site / floor plan to scale',en:'Plans to scale',k:['plan','plano','planta','layout'],c:1},
+ {id:'zon',o:'Zoning compatibility',en:'Zoning',k:['zoning','zonificacion','zoneamento','plu'],c:0},
+ {id:'saf',o:'Fire / safety documentation',en:'Fire/safety docs',k:['fire','seguridad','bombeiros','incendie'],c:0},
+ {id:'fee',o:'Fee payment',en:'Fee payment',k:['fee','pago','taxa','recibo'],c:0}],
+ qs:[
+ {id:'q1',o:'Do areas and addresses match across all documents?',en:'Areas/addresses consistent?',obs:'Likely correction: inconsistent data between documents.',fix:'Create one data sheet and copy it everywhere.'},
+ {id:'q2',o:'Are all certificates within their validity period?',en:'Certificates valid?',obs:'Likely correction: expired certificate.',fix:'Check issue dates against the authority’s validity rules.'},
+ {id:'q3',o:'Are plans scaled, titled and signed?',en:'Plans scaled and signed?',obs:'Likely correction: unscaled or unsigned plans.',fix:'Add scale, north arrow, title block and signature.'}]}
+];
+const I18N={
+es:{v_orders:'Mis pedidos',v_admin:'Panel',need_login_h:'Ingresa para continuar',need_login_p:'Tus informes y pedidos se guardan en tu cuenta para que los veas desde cualquier dispositivo.',login_btn:'Ingresar o crear cuenta',gate_h:'Hay {n} hallazgos más en tu informe',gate_p:'Crea tu cuenta gratis para ver el informe completo, descargarlo en PDF y guardarlo.',gate_btn:'Ver informe completo gratis',buy_h:'¿Quieres que lo revise un experto?',buy_p:'Leemos cada documento con IA, un revisor humano valida el informe y te lo enviamos en 24 h.',buy_note:'Pago seguro con Polar (tarjeta). Impuestos incluidos según tu país.',prod_local:'Pre-check Local',prod_obra:'Pre-check Obra',prod_pack:'Pack Estudio (5)',report_saved:'Informe guardado en tu cuenta',loading:'Cargando…',del_confirm:'¿Borrar este informe?',orders_h:'Mis pedidos',orders_p:'Aquí sigues tus revisiones pagadas y compartes tus documentos.',paid_banner:'¡Pago recibido! Comparte el link a tus documentos para empezar la revisión.',no_orders:'Aún no tienes pedidos.',see_prices:'Ver precios',pay_now:'Completar pago',docs_h:'Comparte tus documentos',docs_p:'Sube tu carpeta a Google Drive, Dropbox o WeTransfer, da acceso con el link y pégalo aquí.',docs_link:'Link a tus documentos',docs_notes:'Notas para el revisor (opcional)',docs_send:'Enviar para revisión',docs_ok:'Documentos recibidos. Te enviamos el informe a tu correo en menos de 24 h.',docs_bad:'Pega un link válido (empieza con https://).',view_report:'Ver informe',order_ref:'Pedido',st_checkout:'Pago pendiente',st_paid_unverified:'Pagado',st_docs_sent:'Documentos recibidos',st_in_review:'En revisión',st_delivered:'Entregado',st_refunded:'Reembolsado',st_cancelled:'Cancelado',adm_h:'Panel de administración',adm_p:'Pedidos, contactos y preguntas que llegan desde la web. Solo lo ven los correos de administrador.',adm_orders:'Pedidos',adm_leads:'Contactos',adm_q:'Preguntas',adm_out:'Prospección',adm_ai:'Ajustes',adm_orders_note:'Confirma cada pago en el dashboard de Polar (referencia = número de pedido).',export:'Exportar CSV',th_prod:'Producto',th_report:'Link del informe',th_prof:'Perfil',qf_q:'Pregunta',reply:'Responder',k_paid:'Pedidos pagados',k_rev:'Ingresos',k_leads:'Contactos',k_q:'Preguntas',lg_terms:'Términos',lg_priv:'Privacidad',lg_ai:'Uso de IA',foot_co:'alaprima es un producto de',declared:'Declarado, no subido',v_check:'Nueva revisión',v_hist:'Mis informes',v_out:'Prospección',v_team:'Equipo',step:'Paso {n} de 4',s1_h:'¿Qué trámite vas a presentar?',s1_p:'Elige el trámite y la ciudad. El checklist se arma con los requisitos de esa ciudad.',lbl_city:'Ciudad o distrito',lbl_project:'Nombre del proyecto o local',next:'Continuar',back:'Atrás',
+s2_h:'Sube tu expediente',s2_p:'Arrastra tus archivos. Los reconocemos por su nombre; si no, asígnalos tú. Puedes marcar lo que tienes aunque no lo subas.',drop:'Arrastra aquí tus PDF, fotos o planos',drop2:'o toca para elegir archivos · se quedan en tu navegador',files:'{n} archivos cargados',st_file:'Archivo: {f}',opt_have:'Lo tengo (no subido)',opt_missing:'No lo tengo',opt_na:'No aplica',opt_assign:'Asignar archivo…',optional:'si aplica',critical:'crítico',
+s3_h:'Cinco preguntas que evitan observaciones',s3_p:'Son las causas más comunes de observación para este trámite.',yes:'Sí',no:'No',unk:'No sé',see_report:'Ver mi informe',
+s4_h:'Tu informe de pre-revisión',readiness:'Preparación del expediente',findings:'Hallazgos ordenados por urgencia',missing:'Faltante',likely:'Probable',verify:'Verificar',ok:'Completo',sum:'{m} faltantes · {p} observaciones probables · {v} por verificar',pdf:'Descargar PDF',new:'Nueva revisión',ai_btn:'Revisión con IA',
+upsell:'¿Quieres que lo revisemos de verdad? En el Pre-check leemos cada documento con IA y un revisor valida el informe en 24 h.',upsell_btn:'Pedir revisión humana',
+disclaimer:'Pre-revisión orientativa. No es asesoría legal, no reemplaza a un profesional habilitado y la aprobación depende de la autoridad.',
+hist_h:'Mis informes',hist_p:'Guardados en tu cuenta.',th_date:'Fecha',th_proc:'Trámite',th_city:'Ciudad',open:'Abrir',del:'Borrar',empty:'Aún no hay informes.',
+out_h:'Prospección',out_p:'Importa el CSV del scraper, filtra por país y envía correos personalizados en el idioma de cada lead desde tu Gmail.',import_csv:'Importar CSV del scraper',export_csv:'Exportar CSV',
+out_rules:'Envía de forma manual y personalizada, máximo 40–80 correos al día por cuenta, siempre con opción de baja. No importes estos contactos a Substack ni a herramientas masivas sin su consentimiento.',
+th_lead:'Lead',th_email:'Correo',th_lang:'Idioma',th_status:'Estado',all:'Todos',st_new:'Nuevo',st_sent:'Enviado',st_reply:'Respondió',st_won:'Cliente',st_lost:'No interesado',gmail:'Gmail',copy:'Copiar',today:'Hoy: {n} enviados',
+k_total:'Leads',k_sent:'Enviados',k_reply:'Respuestas',k_won:'Clientes',
+team_h:'Equipo',team_p:'Configuración interna. Todo se guarda solo en este navegador.',ai_cfg:'Revisión con IA (Claude)',model:'Modelo',save:'Guardar',clear:'Borrar',ai_note:'La clave queda en este navegador y se usa para llamar directamente a la API de Anthropic. Úsala solo en tu equipo, nunca en una computadora compartida. Cada revisión consume créditos de API.',
+checkout_cfg:'Links de pago (Polar) y firma',sender:'Firma para correos',data_h:'Datos',data_p:'Respaldo de informes, leads y configuración.',export_all:'Exportar respaldo JSON',import_all:'Importar respaldo',wipe:'Borrar todo',saved:'Guardado',copied:'Copiado',
+ai_need:'Configura tu API key en Equipo para usar la revisión con IA.',ai_nofiles:'Sube al menos un PDF o imagen en el paso 2.',ai_run:'Leyendo tus documentos con IA…',ai_done:'Revisión con IA agregada al informe.',ai_fail:'La revisión con IA falló: {e}',confirm_wipe:'¿Borrar todos los datos de este navegador?'},
+en:{v_orders:'My orders',v_admin:'Admin',need_login_h:'Log in to continue',need_login_p:'Your reports and orders are saved to your account so you can see them on any device.',login_btn:'Log in or sign up',gate_h:'There are {n} more findings in your report',gate_p:'Create a free account to see the full report, download it as PDF and save it.',gate_btn:'See the full report free',buy_h:'Want an expert to review it?',buy_p:'We read every document with AI, a human reviewer validates the report and we send it within 24 h.',buy_note:'Secure card payment with Polar. Taxes included for your country.',prod_local:'Pre-check Business',prod_obra:'Pre-check Build',prod_pack:'Studio Pack (5)',report_saved:'Report saved to your account',loading:'Loading…',del_confirm:'Delete this report?',orders_h:'My orders',orders_p:'Track your paid reviews and share your documents here.',paid_banner:'Payment received! Share the link to your documents to start the review.',no_orders:'No orders yet.',see_prices:'See pricing',pay_now:'Complete payment',docs_h:'Share your documents',docs_p:'Upload your folder to Google Drive, Dropbox or WeTransfer, enable link access and paste it here.',docs_link:'Link to your documents',docs_notes:'Notes for the reviewer (optional)',docs_send:'Send for review',docs_ok:'Documents received. We’ll email your report within 24 h.',docs_bad:'Paste a valid link (starting with https://).',view_report:'View report',order_ref:'Order',st_checkout:'Payment pending',st_paid_unverified:'Paid',st_docs_sent:'Documents received',st_in_review:'In review',st_delivered:'Delivered',st_refunded:'Refunded',st_cancelled:'Cancelled',adm_h:'Admin panel',adm_p:'Orders, contacts and questions coming from the website. Only admin emails can see this.',adm_orders:'Orders',adm_leads:'Contacts',adm_q:'Questions',adm_out:'Outreach',adm_ai:'Settings',adm_orders_note:'Confirm each payment in the Polar dashboard (reference = order number).',export:'Export CSV',th_prod:'Product',th_report:'Report link',th_prof:'Profile',qf_q:'Question',reply:'Reply',k_paid:'Paid orders',k_rev:'Revenue',k_leads:'Contacts',k_q:'Questions',lg_terms:'Terms',lg_priv:'Privacy',lg_ai:'AI use',foot_co:'alaprima is a product of',declared:'Declared, not uploaded',v_check:'New check',v_hist:'My reports',v_out:'Outreach',v_team:'Team',step:'Step {n} of 4',s1_h:'Which permit are you filing?',s1_p:'Pick the permit and the city. The checklist is built from that city’s requirements.',lbl_city:'City or district',lbl_project:'Project or business name',next:'Continue',back:'Back',
+s2_h:'Upload your application',s2_p:'Drop your files. We match them by name; if not, assign them yourself. You can mark items you have without uploading.',drop:'Drop your PDFs, photos or plans here',drop2:'or tap to choose files · they stay in your browser',files:'{n} files loaded',st_file:'File: {f}',opt_have:'I have it (not uploaded)',opt_missing:'I don’t have it',opt_na:'Not applicable',opt_assign:'Assign file…',optional:'if applicable',critical:'critical',
+s3_h:'Five questions that prevent corrections',s3_p:'These are the most common reasons this permit gets corrections.',yes:'Yes',no:'No',unk:'Not sure',see_report:'See my report',
+s4_h:'Your pre-check report',readiness:'Application readiness',findings:'Findings ranked by urgency',missing:'Missing',likely:'Likely',verify:'Verify',ok:'Complete',sum:'{m} missing · {p} likely corrections · {v} to verify',pdf:'Download PDF',new:'New check',ai_btn:'AI review',
+upsell:'Want a real review? In the Pre-check we read every document with AI and a reviewer validates the report within 24 h.',upsell_btn:'Request human review',
+disclaimer:'Informational pre-check. Not legal advice, does not replace a licensed professional, and approval depends on the authority.',
+hist_h:'My reports',hist_p:'Saved to your account.',th_date:'Date',th_proc:'Permit',th_city:'City',open:'Open',del:'Delete',empty:'No reports yet.',
+out_h:'Outreach',out_p:'Import the scraper CSV, filter by country and send personalized emails in each lead’s language from your Gmail.',import_csv:'Import scraper CSV',export_csv:'Export CSV',
+out_rules:'Send manually and personally, 40–80 emails a day per account at most, always with an opt-out. Do not import these contacts into Substack or bulk tools without their consent.',
+th_lead:'Lead',th_email:'Email',th_lang:'Language',th_status:'Status',all:'All',st_new:'New',st_sent:'Sent',st_reply:'Replied',st_won:'Customer',st_lost:'Not interested',gmail:'Gmail',copy:'Copy',today:'Today: {n} sent',
+k_total:'Leads',k_sent:'Sent',k_reply:'Replies',k_won:'Customers',
+team_h:'Team',team_p:'Internal settings. Everything is stored only in this browser.',ai_cfg:'AI review (Claude)',model:'Model',save:'Save',clear:'Clear',ai_note:'The key stays in this browser and is used to call the Anthropic API directly. Use it only on your own machine. Each review uses API credits.',
+checkout_cfg:'Payment links (Polar) and signature',sender:'Email signature',data_h:'Data',data_p:'Backup of reports, leads and settings.',export_all:'Export JSON backup',import_all:'Import backup',wipe:'Delete everything',saved:'Saved',copied:'Copied',
+ai_need:'Add your API key under Team to use the AI review.',ai_nofiles:'Upload at least one PDF or image in step 2.',ai_run:'Reading your documents with AI…',ai_done:'AI review added to the report.',ai_fail:'AI review failed: {e}',confirm_wipe:'Delete all data in this browser?'},
+pt:{v_orders:'Meus pedidos',v_admin:'Painel',need_login_h:'Entre para continuar',need_login_p:'Seus relatórios e pedidos ficam salvos na sua conta, em qualquer dispositivo.',login_btn:'Entrar ou criar conta',gate_h:'Há mais {n} achados no seu relatório',gate_p:'Crie sua conta grátis para ver o relatório completo, baixar em PDF e salvar.',gate_btn:'Ver relatório completo grátis',buy_h:'Quer a revisão de um especialista?',buy_p:'Lemos cada documento com IA, um revisor humano valida o relatório e enviamos em 24 h.',buy_note:'Pagamento seguro com cartão pela Polar. Impostos incluídos conforme seu país.',prod_local:'Pré-check Comércio',prod_obra:'Pré-check Obra',prod_pack:'Pacote Escritório (5)',report_saved:'Relatório salvo na sua conta',loading:'Carregando…',del_confirm:'Apagar este relatório?',orders_h:'Meus pedidos',orders_p:'Acompanhe suas revisões pagas e compartilhe seus documentos aqui.',paid_banner:'Pagamento recebido! Compartilhe o link dos seus documentos para começar a revisão.',no_orders:'Você ainda não tem pedidos.',see_prices:'Ver preços',pay_now:'Concluir pagamento',docs_h:'Compartilhe seus documentos',docs_p:'Envie sua pasta ao Google Drive, Dropbox ou WeTransfer, libere o acesso por link e cole aqui.',docs_link:'Link dos seus documentos',docs_notes:'Notas para o revisor (opcional)',docs_send:'Enviar para revisão',docs_ok:'Documentos recebidos. Enviaremos o relatório ao seu e-mail em até 24 h.',docs_bad:'Cole um link válido (começa com https://).',view_report:'Ver relatório',order_ref:'Pedido',st_checkout:'Pagamento pendente',st_paid_unverified:'Pago',st_docs_sent:'Documentos recebidos',st_in_review:'Em revisão',st_delivered:'Entregue',st_refunded:'Reembolsado',st_cancelled:'Cancelado',adm_h:'Painel de administração',adm_p:'Pedidos, contatos e perguntas que chegam pelo site. Só os e-mails de administrador veem.',adm_orders:'Pedidos',adm_leads:'Contatos',adm_q:'Perguntas',adm_out:'Prospecção',adm_ai:'Ajustes',adm_orders_note:'Confirme cada pagamento no painel da Polar (referência = número do pedido).',export:'Exportar CSV',th_prod:'Produto',th_report:'Link do relatório',th_prof:'Perfil',qf_q:'Pergunta',reply:'Responder',k_paid:'Pedidos pagos',k_rev:'Receita',k_leads:'Contatos',k_q:'Perguntas',lg_terms:'Termos',lg_priv:'Privacidade',lg_ai:'Uso de IA',foot_co:'alaprima é um produto da',declared:'Declarado, não enviado',v_check:'Nova revisão',v_hist:'Meus relatórios',v_out:'Prospecção',v_team:'Equipe',step:'Passo {n} de 4',s1_h:'Qual processo você vai protocolar?',s1_p:'Escolha o processo e a cidade. O checklist usa os requisitos dessa cidade.',lbl_city:'Cidade ou bairro',lbl_project:'Nome do projeto ou empresa',next:'Continuar',back:'Voltar',
+s2_h:'Envie seu processo',s2_p:'Arraste seus arquivos. Reconhecemos pelo nome; se não, atribua você. Pode marcar o que já tem mesmo sem enviar.',drop:'Arraste aqui seus PDFs, fotos ou plantas',drop2:'ou toque para escolher · ficam no seu navegador',files:'{n} arquivos carregados',st_file:'Arquivo: {f}',opt_have:'Tenho (não enviado)',opt_missing:'Não tenho',opt_na:'Não se aplica',opt_assign:'Atribuir arquivo…',optional:'se aplicável',critical:'crítico',
+s3_h:'Cinco perguntas que evitam exigências',s3_p:'São as causas mais comuns de exigência neste processo.',yes:'Sim',no:'Não',unk:'Não sei',see_report:'Ver meu relatório',
+s4_h:'Seu relatório de pré-revisão',readiness:'Preparo do processo',findings:'Achados por urgência',missing:'Pendente',likely:'Provável',verify:'Verificar',ok:'Completo',sum:'{m} pendências · {p} exigências prováveis · {v} a verificar',pdf:'Baixar PDF',new:'Nova revisão',ai_btn:'Revisão com IA',
+upsell:'Quer uma revisão de verdade? No Pré-check lemos cada documento com IA e um revisor valida o relatório em 24 h.',upsell_btn:'Pedir revisão humana',
+disclaimer:'Pré-revisão orientativa. Não é assessoria jurídica, não substitui um profissional habilitado e a aprovação depende do órgão competente.',
+hist_h:'Meus relatórios',hist_p:'Salvos na sua conta.',th_date:'Data',th_proc:'Processo',th_city:'Cidade',open:'Abrir',del:'Apagar',empty:'Nenhum relatório ainda.',
+out_h:'Prospecção',out_p:'Importe o CSV do scraper, filtre por país e envie e-mails personalizados no idioma de cada lead pelo seu Gmail.',import_csv:'Importar CSV do scraper',export_csv:'Exportar CSV',
+out_rules:'Envie de forma manual e personalizada, no máximo 40–80 e-mails por dia por conta, sempre com opção de descadastro. Não importe estes contatos no Substack nem em ferramentas de envio em massa sem consentimento.',
+th_lead:'Lead',th_email:'E-mail',th_lang:'Idioma',th_status:'Status',all:'Todos',st_new:'Novo',st_sent:'Enviado',st_reply:'Respondeu',st_won:'Cliente',st_lost:'Sem interesse',gmail:'Gmail',copy:'Copiar',today:'Hoje: {n} enviados',
+k_total:'Leads',k_sent:'Enviados',k_reply:'Respostas',k_won:'Clientes',
+team_h:'Equipe',team_p:'Configurações internas. Tudo fica só neste navegador.',ai_cfg:'Revisão com IA (Claude)',model:'Modelo',save:'Salvar',clear:'Apagar',ai_note:'A chave fica neste navegador e chama a API da Anthropic diretamente. Use só no seu computador. Cada revisão consome créditos.',
+checkout_cfg:'Links de pagamento (Polar) e assinatura',sender:'Assinatura dos e-mails',data_h:'Dados',data_p:'Backup de relatórios, leads e configurações.',export_all:'Exportar backup JSON',import_all:'Importar backup',wipe:'Apagar tudo',saved:'Salvo',copied:'Copiado',
+ai_need:'Configure sua API key em Equipe para usar a revisão com IA.',ai_nofiles:'Envie ao menos um PDF ou imagem no passo 2.',ai_run:'Lendo seus documentos com IA…',ai_done:'Revisão com IA adicionada ao relatório.',ai_fail:'A revisão com IA falhou: {e}',confirm_wipe:'Apagar todos os dados deste navegador?'},
+fr:{v_orders:'Mes commandes',v_admin:'Admin',need_login_h:'Connectez-vous pour continuer',need_login_p:'Vos rapports et commandes sont enregistrés dans votre compte, sur tous vos appareils.',login_btn:'Se connecter ou créer un compte',gate_h:'Votre rapport contient {n} constats de plus',gate_p:'Créez un compte gratuit pour voir le rapport complet, le télécharger en PDF et l’enregistrer.',gate_btn:'Voir le rapport complet gratuitement',buy_h:'Une relecture par un expert ?',buy_p:'L’IA lit chaque pièce, un relecteur humain valide le rapport et nous l’envoyons sous 24 h.',buy_note:'Paiement sécurisé par carte avec Polar. Taxes incluses selon votre pays.',prod_local:'Pré-check Commerce',prod_obra:'Pré-check Travaux',prod_pack:'Pack Agence (5)',report_saved:'Rapport enregistré dans votre compte',loading:'Chargement…',del_confirm:'Supprimer ce rapport ?',orders_h:'Mes commandes',orders_p:'Suivez vos relectures payées et partagez vos pièces ici.',paid_banner:'Paiement reçu ! Partagez le lien vers vos pièces pour lancer la relecture.',no_orders:'Aucune commande pour l’instant.',see_prices:'Voir les tarifs',pay_now:'Finaliser le paiement',docs_h:'Partagez vos pièces',docs_p:'Déposez votre dossier sur Google Drive, Dropbox ou WeTransfer, activez l’accès par lien et collez-le ici.',docs_link:'Lien vers vos pièces',docs_notes:'Notes pour le relecteur (facultatif)',docs_send:'Envoyer pour relecture',docs_ok:'Pièces reçues. Nous vous envoyons le rapport par e-mail sous 24 h.',docs_bad:'Collez un lien valide (commençant par https://).',view_report:'Voir le rapport',order_ref:'Commande',st_checkout:'Paiement en attente',st_paid_unverified:'Payé',st_docs_sent:'Pièces reçues',st_in_review:'En relecture',st_delivered:'Livré',st_refunded:'Remboursé',st_cancelled:'Annulé',adm_h:'Administration',adm_p:'Commandes, contacts et questions reçus via le site. Visible uniquement par les e-mails administrateurs.',adm_orders:'Commandes',adm_leads:'Contacts',adm_q:'Questions',adm_out:'Prospection',adm_ai:'Réglages',adm_orders_note:'Confirmez chaque paiement dans le tableau de bord Polar (référence = numéro de commande).',export:'Exporter en CSV',th_prod:'Produit',th_report:'Lien du rapport',th_prof:'Profil',qf_q:'Question',reply:'Répondre',k_paid:'Commandes payées',k_rev:'Chiffre d’affaires',k_leads:'Contacts',k_q:'Questions',lg_terms:'Conditions',lg_priv:'Confidentialité',lg_ai:'Usage de l’IA',foot_co:'alaprima est un produit de',declared:'Déclaré, non envoyé',v_check:'Nouvelle vérification',v_hist:'Mes rapports',v_out:'Prospection',v_team:'Équipe',step:'Étape {n} sur 4',s1_h:'Quelle démarche allez-vous déposer ?',s1_p:'Choisissez la démarche et la ville. La checklist reprend les exigences de cette commune.',lbl_city:'Ville ou commune',lbl_project:'Nom du projet ou du commerce',next:'Continuer',back:'Retour',
+s2_h:'Ajoutez votre dossier',s2_p:'Glissez vos fichiers. Nous les reconnaissons par leur nom ; sinon, attribuez-les vous-même. Vous pouvez cocher les pièces que vous avez sans les envoyer.',drop:'Glissez ici vos PDF, photos ou plans',drop2:'ou touchez pour choisir · ils restent dans votre navigateur',files:'{n} fichiers chargés',st_file:'Fichier : {f}',opt_have:'Je l’ai (non envoyé)',opt_missing:'Je ne l’ai pas',opt_na:'Non applicable',opt_assign:'Attribuer un fichier…',optional:'si applicable',critical:'essentiel',
+s3_h:'Cinq questions qui évitent les demandes de pièces',s3_p:'Ce sont les causes les plus fréquentes pour cette démarche.',yes:'Oui',no:'Non',unk:'Je ne sais pas',see_report:'Voir mon rapport',
+s4_h:'Votre rapport de pré-vérification',readiness:'Préparation du dossier',findings:'Constats par priorité',missing:'Manquant',likely:'Probable',verify:'À vérifier',ok:'Complet',sum:'{m} manquants · {p} remarques probables · {v} à vérifier',pdf:'Télécharger le PDF',new:'Nouvelle vérification',ai_btn:'Relecture par IA',
+upsell:'Vous voulez une vraie relecture ? Dans le Pré-check, l’IA lit chaque pièce et un relecteur valide le rapport en 24 h.',upsell_btn:'Demander une relecture humaine',
+disclaimer:'Pré-vérification indicative. Ce n’est pas un conseil juridique, cela ne remplace pas un professionnel habilité et la décision appartient à l’autorité.',
+hist_h:'Mes rapports',hist_p:'Enregistrés dans votre compte.',th_date:'Date',th_proc:'Démarche',th_city:'Ville',open:'Ouvrir',del:'Supprimer',empty:'Aucun rapport pour l’instant.',
+out_h:'Prospection',out_p:'Importez le CSV du scraper, filtrez par pays et envoyez des e-mails personnalisés dans la langue de chaque contact depuis Gmail.',import_csv:'Importer le CSV du scraper',export_csv:'Exporter le CSV',
+out_rules:'Envoyez manuellement et de façon personnalisée, 40 à 80 e-mails par jour et par compte au maximum, toujours avec un lien de désinscription. N’importez pas ces contacts dans Substack ni dans un outil d’envoi de masse sans leur consentement.',
+th_lead:'Contact',th_email:'E-mail',th_lang:'Langue',th_status:'Statut',all:'Tous',st_new:'Nouveau',st_sent:'Envoyé',st_reply:'A répondu',st_won:'Client',st_lost:'Pas intéressé',gmail:'Gmail',copy:'Copier',today:'Aujourd’hui : {n} envoyés',
+k_total:'Contacts',k_sent:'Envoyés',k_reply:'Réponses',k_won:'Clients',
+team_h:'Équipe',team_p:'Réglages internes. Tout reste dans ce navigateur.',ai_cfg:'Relecture par IA (Claude)',model:'Modèle',save:'Enregistrer',clear:'Effacer',ai_note:'La clé reste dans ce navigateur et appelle directement l’API d’Anthropic. À utiliser uniquement sur votre ordinateur. Chaque relecture consomme des crédits.',
+checkout_cfg:'Liens de paiement (Polar) et signature',sender:'Signature des e-mails',data_h:'Données',data_p:'Sauvegarde des rapports, contacts et réglages.',export_all:'Exporter la sauvegarde JSON',import_all:'Importer une sauvegarde',wipe:'Tout effacer',saved:'Enregistré',copied:'Copié',
+ai_need:'Ajoutez votre clé API dans Équipe pour utiliser la relecture par IA.',ai_nofiles:'Ajoutez au moins un PDF ou une image à l’étape 2.',ai_run:'Lecture de vos pièces par l’IA…',ai_done:'Relecture IA ajoutée au rapport.',ai_fail:'La relecture IA a échoué : {e}',confirm_wipe:'Effacer toutes les données de ce navigateur ?'}
+};
+/* ===== plantillas de correo por idioma (prospección) ===== */
+const MAIL={
+es:{s:'{city}: expedientes sin observaciones',b:'Hola{nm},\n\nVi {biz} y quería escribirte directamente. Trabajamos con estudios y contratistas que presentan licencias en {city} y siempre escuchamos lo mismo: el expediente vuelve por un detalle (un plano sin escala, un certificado vencido, áreas que no cuadran) y se pierden semanas.\n\nCreamos alaprima: revisamos tu expediente contra los requisitos de tu municipalidad antes de presentarlo y te damos en 24 h la lista de faltantes y observaciones probables.\n\nEsta semana hacemos la primera revisión sin costo para 10 estudios. ¿Te interesa que revisemos tu próximo expediente?\n\n{sig}\n\nSi prefieres no recibir más correos, responde "baja" y no te volveré a escribir.'},
+en:{s:'Fewer permit corrections in {city}',b:'Hi{nm},\n\nI came across {biz} and wanted to reach out directly. We work with architects and contractors who file permits in {city}, and we keep hearing the same thing: applications come back over small things (a missing dimension, an expired form, square footage that doesn’t match) and weeks get lost.\n\nWe built alaprima: we check your application against your city’s submittal requirements before you file and send you a list of missing items and likely corrections within 24 hours.\n\nThis week we’re doing the first pre-check free for 10 firms. Want us to look at your next submittal?\n\n{sig}\n\nIf you’d rather not hear from me again, just reply "unsubscribe".'},
+pt:{s:'{city}: processos sem exigências',b:'Olá{nm},\n\nConheci {biz} e quis escrever diretamente. Trabalhamos com escritórios e construtoras que protocolam alvarás em {city} e sempre ouvimos o mesmo: o processo volta por um detalhe (planta sem cota, matrícula vencida, área que não bate) e se perdem semanas.\n\nCriamos a alaprima: revisamos o seu processo contra os requisitos da prefeitura antes do protocolo e enviamos em 24 h a lista de pendências e exigências prováveis.\n\nEsta semana fazemos a primeira revisão sem custo para 10 escritórios. Quer que a gente revise o seu próximo processo?\n\n{sig}\n\nSe preferir não receber mais e-mails, responda "sair" e não escrevo mais.'},
+fr:{s:'{city} : des dossiers complets du premier coup',b:'Bonjour{nm},\n\nJ’ai découvert {biz} et je me permets de vous écrire directement. Nous travaillons avec des architectes et maîtres d’œuvre qui déposent des autorisations à {city}, et nous entendons toujours la même chose : le dossier revient pour un détail (une cote manquante, une pièce oubliée, une surface incohérente) et l’on perd des semaines.\n\nNous avons créé alaprima : nous vérifions votre dossier selon les exigences de votre commune avant le dépôt et vous envoyons sous 24 h la liste des pièces manquantes et des remarques probables.\n\nCette semaine, la première pré-vérification est offerte à 10 agences. Souhaitez-vous que nous regardions votre prochain dossier ?\n\n{sig}\n\nSi vous préférez ne plus recevoir de message, répondez « désinscription » et je ne vous écrirai plus.'}};
+const CLANG={US:'en',CA:'en',GB:'en',AU:'en',FR:'fr',BE:'fr',CH:'fr',LU:'fr',MC:'fr',BR:'pt',PT:'pt',AO:'pt',MZ:'pt'};
+
+/* ================= ESTADO ================= */
+const RET=new URLSearchParams(location.search);
+const CORE=window.AP_CORE, CFG=CORE.cfg, DB=CORE.db;
+const S={lang:'es',proc:null,files:[],assign:{},ans:{},step:1,current:null,leadPage:0,view:'check',adm:'orders',paidOrder:null};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const t=(k,v)=>{let s=(I18N[S.lang][k]??I18N.es[k]??k);if(v)for(const x in v)s=String(s).replaceAll('{'+x+'}',v[x]);return s};
+const store={get(k,d){try{return JSON.parse(localStorage.getItem('ap_'+k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem('ap_'+k,JSON.stringify(v))}catch(e){toast('Storage full')}}};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[_\-.]+/g,' ');
+const toast=(m,ms)=>CORE.toast(m,ms);
+const PROC_CC={'PE-LF':'PE','PE-LE':'PE','US-ADU':'US','FR-PC':'FR','BR-SP':'BR','MX-CDMX':'MX'};
+const fmtDate=s=>{try{return new Date(s).toLocaleDateString(S.lang,{day:'2-digit',month:'short',year:'numeric'})}catch(e){return s||''}};
+const money=n=>S.lang==='fr'?n+' $':'$'+n;
+const user=()=>CORE.user();
+
+/* ================= NAVEGACIÓN ================= */
+function applyI18n(){document.documentElement.lang=S.lang;$$('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));$$('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===S.lang));
+ $$('.lg-link').forEach(a=>a.href='legal.html?lang='+S.lang+'#'+a.dataset.h);
+ CORE.setLang(S.lang);renderProcs();if(S.proc){renderReqs();renderQs()}$('#stepLabel').textContent=t('step',{n:S.step});if(S.step===4&&S.current)renderReport(S.current);refreshView();try{localStorage.setItem('ap_lang',S.lang)}catch(e){}}
+function view(v){if(v==='admin'&&!CORE.isAdmin())v='check';S.view=v;$$('section[id^=v-]').forEach(s=>s.classList.toggle('hide',s.id!=='v-'+v));$$('.views button').forEach(x=>x.dataset.view===v?x.setAttribute('aria-current','page'):x.removeAttribute('aria-current'));history.replaceState(null,'','?lang='+S.lang+'#'+v);refreshView();window.scrollTo(0,0)}
+function refreshView(){if(S.view==='reports')renderHist();if(S.view==='orders')renderOrders();if(S.view==='admin')renderAdmin()}
+function needLogin(sec){const box=$('#v-'+sec+' .needlogin');const u=user();if(!box)return !!u;box.classList.toggle('hide',!!u);if(!u){box.innerHTML=`<h2>${t('need_login_h')}</h2><p class="muted">${t('need_login_p')}</p><button class="btn">${t('login_btn')}</button>`;box.querySelector('button').onclick=()=>CORE.openAuth('login',()=>refreshView())}return !!u}
+function go(n){S.step=n;[1,2,3,4].forEach(i=>$('#s'+i).classList.toggle('hide',i!==n));$$('#stepper div').forEach((d,i)=>d.classList.toggle('on',i<n));$('#stepLabel').textContent=t('step',{n});window.scrollTo({top:0,behavior:'smooth'})}
+
+/* ================= ASISTENTE ================= */
+function renderProcs(){$('#procs').innerHTML=PROCS.map(p=>`<button class="proc" data-p="${p.id}" aria-pressed="${S.proc&&S.proc.id===p.id}"><b>${p.flag} ${esc(p.t[S.lang])}</b><small>${esc(p.place)}</small></button>`).join('');
+ $$('.proc').forEach(b=>b.onclick=()=>{S.proc=PROCS.find(p=>p.id===b.dataset.p);S.assign={};S.ans={};autoMatch();renderProcs();$('#to2').disabled=false})}
+const gloss=r=>S.lang!==S.proc.loc&&r.en&&r.en!==r.o?`<div class="g">${esc(r.en)}</div>`:'';
+function autoMatch(){if(!S.proc)return;S.proc.reqs.forEach(r=>{if(S.assign[r.id]&&S.assign[r.id].startsWith('f:'))return;const f=S.files.find(f=>r.k.some(k=>norm(f.name).includes(norm(k))));if(f)S.assign[r.id]='f:'+f.name})}
+function renderReqs(){const opts=r=>{const cur=S.assign[r.id]||'';return `<select data-r="${r.id}" aria-label="${esc(r.o)}"><option value="" ${!cur?'selected':''}>${t('opt_assign')}</option>${S.files.map(f=>`<option value="f:${esc(f.name)}" ${cur==='f:'+f.name?'selected':''}>📄 ${esc(f.name)}</option>`).join('')}<option value="have" ${cur==='have'?'selected':''}>${t('opt_have')}</option><option value="missing" ${cur==='missing'?'selected':''}>${t('opt_missing')}</option>${r.opt?`<option value="na" ${cur==='na'?'selected':''}>${t('opt_na')}</option>`:''}</select>`};
+ const icon=r=>{const a=S.assign[r.id]||'';const ok=a.startsWith('f:')||a==='have'||a==='na';return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${ok?'#12A06B':a==='missing'?'#D93A3A':'#C9D1E4'}" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/>${ok?'<path d="M8 12l3 3 5-6"/>':a==='missing'?'<path d="M12 7v6M12 16.5v.5"/>':''}</svg>`};
+ $('#reqs').innerHTML=S.proc.reqs.map(r=>`<div class="req">${icon(r)}<div><b>${esc(r.o)}</b>${r.c?`<span class="pill crit">${t('critical')}</span>`:''}${r.opt?`<span class="pill">${t('optional')}</span>`:''}${gloss(r)}</div>${opts(r)}</div>`).join('');
+ $$('#reqs select').forEach(s=>s.onchange=()=>{S.assign[s.dataset.r]=s.value;renderReqs()});
+ $('#fileCount').textContent=S.files.length?t('files',{n:S.files.length}):''}
+function renderQs(){$('#qs').innerHTML=S.proc.qs.map(q=>`<div class="q"><b>${esc(q.o)}</b>${S.lang!==S.proc.loc&&q.en!==q.o?`<div class="muted" style="font-size:14px">${esc(q.en)}</div>`:''}<div class="seg" role="group">${['yes','no','unk'].map(v=>`<button data-q="${q.id}" data-v="${v}" aria-pressed="${S.ans[q.id]===v}">${t(v)}</button>`).join('')}</div></div>`).join('');
+ $$('.seg button').forEach(b=>b.onclick=()=>{S.ans[b.dataset.q]=b.dataset.v;renderQs()})}
+function addFiles(list){for(const f of list){if(!S.files.find(x=>x.name===f.name&&x.size===f.size))S.files.push(f)}autoMatch();renderReqs()}
+
+/* ================= MOTOR DE REVISIÓN ================= */
+function compute(){const p=S.proc;let tot=0,got=0;const F=[];
+ p.reqs.forEach(r=>{const a=S.assign[r.id]||'';const w=r.c?3:2;if(a==='na')return;tot+=w;
+  if(a.startsWith('f:')){got+=w;F.push({type:'ok',item:r.o,detail:t('st_file',{f:a.slice(2)})})}
+  else if(a==='have'){got+=w*.9;F.push({type:'ok',item:r.o,detail:t('declared')})}
+  else F.push({type:r.opt?'verify':'missing',item:r.o,detail:S.lang!==p.loc?r.en:'',crit:!!r.c})});
+ p.qs.forEach(q=>{const a=S.ans[q.id];tot+=2;if(a==='yes'){got+=2}else if(a==='no'){F.push({type:'likely',item:q.obs,detail:q.o,fix:q.fix})}else{got+=.8;F.push({type:'verify',item:q.o,detail:q.obs,fix:q.fix})}});
+ const order={missing:0,likely:1,verify:2,ok:3};F.sort((a,b)=>order[a.type]-order[b.type]||(b.crit?1:0)-(a.crit?1:0));
+ const rid='AP-'+new Date().getFullYear()+'-'+String(Math.floor(Math.random()*90000)+10000);
+ return {rid,created:new Date().toISOString(),proc:p.id,city:$('#city').value.trim()||p.place,project:$('#project').value.trim(),score:Math.round(got/tot*100),findings:F,ai:null,files:S.files.map(f=>f.name),lang:S.lang,docId:null}}
+async function saveReport(R){const u=user();if(!u)return;const data={uid:u.uid,rid:R.rid,proc:R.proc,city:R.city,project:R.project,score:R.score,findings:R.findings,ai:R.ai||null,files:R.files,lang:R.lang,ts:DB.now()};
+ try{if(R.docId){await DB.update('reports',R.docId,{ai:R.ai||null,findings:R.findings,score:R.score})}else{R.docId=await DB.add('reports',data);toast(t('report_saved'))}}catch(e){toast(CORE.errMsg(e))}}
+function kindOf(R){const p=PROCS.find(x=>x.id===R.proc)||{};return p.kind==='obra'?'obra':'local'}
+function regionOf(R){const cc=PROC_CC[R.proc]||(user()&&user().country)||'';return CORE.regionFor(cc)}
+function renderReport(R){const p=PROCS.find(x=>x.id===R.proc);const c={missing:0,likely:0,verify:0};R.findings.forEach(f=>c[f.type]!==undefined&&c[f.type]++);
+ const u=user();const locked=!u;
+ $('#repId').textContent=R.rid;$('#score').textContent=R.score+'%';$('#meterI').style.width='0';requestAnimationFrame(()=>requestAnimationFrame(()=>$('#meterI').style.width=R.score+'%'));$('#meterI').style.background=R.score>=85?'var(--verde)':R.score>=60?'#E0B400':'var(--rojo)';
+ $('#sumLine').textContent=t('sum',{m:c.missing,p:c.likely,v:c.verify});
+ $('#repMeta').innerHTML=`${p.flag} ${esc(p.t[S.lang])}<br>${esc(R.city)}${R.project?' · '+esc(R.project):''}<br>${new Date(R.created||R.ts).toLocaleString(S.lang)}`;
+ $('#morph').innerHTML=AP.svg(100,100,`<path d="${AP.tile}" fill="${R.score>=85?'#2340D8':'#C9D1E4'}"/><path d="${AP.fold}" fill="#F4E04D"/>${AP.check('#fff',R.score>=85?'morph':'')}`);
+ const lab={missing:['m',t('missing')],likely:['p',t('likely')],verify:['v',t('verify')],ok:['ok',t('ok')]};
+ const all=[...(R.ai&&R.ai.findings?R.ai.findings.map(f=>({...f,isAI:1})):[]),...R.findings];
+ const row=f=>`<div class="fi"><span class="st ${lab[f.type]?lab[f.type][0]:'v'}">${lab[f.type]?lab[f.type][1]:esc(f.type)}${f.isAI?' · IA':''}</span><div><b>${esc(f.item)}</b>${f.detail&&f.detail!==f.item?`<div class="fix">${esc(f.detail)}</div>`:''}${f.fix?`<div class="fix">→ ${esc(f.fix)}</div>`:''}</div></div>`;
+ const shown=locked?all.slice(0,2):all;
+ $('#findings').innerHTML=(R.ai&&R.ai.summary&&!locked?`<div class="notice" style="margin-bottom:10px"><b>IA:</b> ${esc(R.ai.summary)}</div>`:'')+shown.map(row).join('')+
+  (locked?`<div class="gate"><div class="gate-blur">${all.slice(2,5).map(row).join('')}</div><div class="gate-box"><b>${t('gate_h',{n:Math.max(0,all.length-2)})}</b><p>${t('gate_p')}</p><button class="btn" id="gateBtn">${t('gate_btn')}</button></div></div>`:'');
+ if(locked)$('#gateBtn').onclick=()=>CORE.openAuth('signup',async()=>{await saveReport(R);renderReport(R)});
+ $('#pdfBtn').classList.toggle('hide',locked);
+ $('#aiBtn').classList.toggle('hide',!CORE.isAdmin());
+ const k=kindOf(R),rg=regionOf(R),one=CORE.productFor(k,rg),pack=CORE.productFor('pack',rg);
+ $('#upsell').innerHTML=`<b style="font-size:17px">${t('buy_h')}</b><p>${t('buy_p')}</p><div class="buyrow"><button class="btn" data-buy="${one}">${t('prod_'+k)} · ${money(CORE.price(one))}</button><button class="btn l" data-buy="${pack}">${t('prod_pack')} · ${money(CORE.price(pack))}</button></div><p class="muted" style="font-size:12.5px;margin:8px 0 0">${t('buy_note')}</p>`;
+ $$('#upsell [data-buy]').forEach(b=>b.onclick=async()=>{if(!R.docId&&user())await saveReport(R);CORE.checkout(b.dataset.buy,{report_id:R.docId||'',procedure:(p.t.en||'')+' · '+R.city})});
+}
+async function renderHist(){if(!needLogin('reports')){$('#histBody').innerHTML='';return}
+ $('#histBody').innerHTML=`<tr><td colspan="6" class="muted">${t('loading')}</td></tr>`;
+ let H=[];try{H=await DB.listMine('reports')}catch(e){toast(CORE.errMsg(e))}
+ $('#histBody').innerHTML=H.length?H.map(r=>{const p=PROCS.find(x=>x.id===r.proc)||{t:{},flag:''};return `<tr><td>${esc(r.rid)}</td><td>${fmtDate(r.ts)}</td><td>${p.flag} ${esc(p.t[S.lang]||r.proc)}</td><td>${esc(r.city)}</td><td><b>${r.score}%</b></td><td style="white-space:nowrap"><button class="btn l sm" data-open="${r.id}">${t('open')}</button> <button class="btn l sm" data-del="${r.id}">${t('del')}</button></td></tr>`}).join(''):`<tr><td colspan="6" class="muted">${t('empty')}</td></tr>`;
+ $$('[data-open]').forEach(b=>b.onclick=()=>{const r=H.find(x=>x.id===b.dataset.open);const R={...r,docId:r.id,created:r.ts};S.proc=PROCS.find(p=>p.id===R.proc);S.current=R;view('check');go(4);renderReport(R)});
+ $$('[data-del]').forEach(b=>b.onclick=async()=>{if(!confirm(t('del_confirm')))return;try{await DB.remove('reports',b.dataset.del);renderHist()}catch(e){toast(CORE.errMsg(e))}})}
+
+/* ================= PEDIDOS ================= */
+const ST=['checkout','paid_unverified','docs_sent','in_review','delivered','refunded','cancelled'];
+const stBadge=s=>`<span class="badge b-${s}">${t('st_'+s)}</span>`;
+function payExisting(o){const link=(CFG.POLAR||{})[o.product];const u=user();
+ if(!link){toast(CORE.payMsg(),7000);return}
+ CORE.LS.set('pending_order',{id:o.id,key:o.product,at:Date.now()});const x=new URL(link);x.searchParams.set('customer_email',u.email);x.searchParams.set('locale',{es:'es',en:'en',pt:'pt-BR',fr:'fr'}[S.lang]);x.searchParams.set('reference_id',o.id);location.href=x.toString()}
+async function renderOrders(){const box=$('#ordersList');if(!needLogin('orders')){box.innerHTML='';return}
+ box.innerHTML=`<p class="muted">${t('loading')}</p>`;let O=[];try{O=await DB.listMine('orders')}catch(e){toast(CORE.errMsg(e))}
+ $('#paidBanner').innerHTML=S.paidOrder?`<div class="ok-banner">✅ ${t('paid_banner')}</div>`:'';
+ if(!O.length){box.innerHTML=`<div class="card"><p style="margin:0">${t('no_orders')}</p><div class="row" style="margin-top:12px"><button class="btn" id="goCheck">${t('v_check')}</button><a class="btn l" href="index.html?lang=${S.lang}#pricing">${t('see_prices')}</a></div></div>`;$('#goCheck').onclick=()=>view('check');return}
+ box.innerHTML=O.map(o=>{let act='';
+  if(o.status==='checkout')act=`<button class="btn sm" data-pay="${o.id}">${t('pay_now')}</button>`;
+  else if(o.status==='paid_unverified')act=`<form class="docs" data-docs="${o.id}"><b>${t('docs_h')}</b><p class="muted" style="margin:4px 0 10px">${t('docs_p')}</p><label class="f"><span>${t('docs_link')}</span><input name="docs_link" type="url" placeholder="https://drive.google.com/..." required></label><label class="f" style="margin-top:8px"><span>${t('docs_notes')}</span><textarea name="notes" rows="2" maxlength="1500"></textarea></label><button class="btn sm" style="margin-top:10px">${t('docs_send')}</button></form>`;
+  else if(['docs_sent','in_review'].includes(o.status))act=`<p class="muted" style="margin:6px 0 0">${t('docs_ok')}</p>${o.docs_link?`<p style="margin:6px 0 0;font-size:14px;word-break:break-all">📎 <a href="${esc(o.docs_link)}" target="_blank" rel="noopener">${esc(o.docs_link)}</a></p>`:''}`;
+  if(o.report_url)act+=`<p style="margin:10px 0 0"><a class="btn sm" href="${esc(o.report_url)}" target="_blank" rel="noopener">${t('view_report')}</a></p>`;
+  return `<article class="ocard ${S.paidOrder===o.id?'hl-card':''}"><div class="row" style="justify-content:space-between"><b style="font-size:18px">${t('prod_'+o.kind)||esc(o.product)} · ${money(o.price)}</b>${stBadge(o.status)}</div><p class="muted" style="margin:4px 0 10px;font-size:13.5px">${fmtDate(o.ts)} · ${t('order_ref')}: ${esc(o.id)}${o.procedure?' · '+esc(o.procedure):''}</p>${act}</article>`}).join('');
+ $$('[data-pay]').forEach(b=>b.onclick=()=>payExisting(O.find(o=>o.id===b.dataset.pay)));
+ $$('[data-docs]').forEach(f=>f.onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f));if(!/^https?:\/\/\S+\.\S+/.test(d.docs_link||'')){toast(t('docs_bad'));return}
+  const b=f.querySelector('button');b.disabled=true;try{await DB.update('orders',f.dataset.docs,{docs_link:d.docs_link.trim().slice(0,600),notes:String(d.notes||'').slice(0,1500),status:'docs_sent',updated:DB.now()});toast(t('saved'));S.paidOrder=null;renderOrders()}catch(err){toast(CORE.errMsg(err));b.disabled=false}})}
+
+/* ================= PANEL ADMIN ================= */
+const ADM=[['orders','adm_orders'],['leads','adm_leads'],['questions','adm_q'],['outreach','adm_out'],['settings','adm_ai']];
+const DATA={orders:[],leads:[],questions:[]};
+function csvDl(name,rows){if(!rows.length){toast(t('empty'));return}const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))].filter(k=>!['findings','ai'].includes(k));dl(name,'﻿'+[keys.join(','),...rows.map(o=>keys.map(k=>'"'+String(typeof o[k]==='object'&&o[k]!==null?JSON.stringify(o[k]):o[k]??'').replace(/"/g,'""')+'"').join(','))].join('\n'),'text/csv')}
+async function renderAdmin(){if(!CORE.isAdmin()){view('check');return}
+ $('#admTabs').innerHTML=ADM.map(([k,l])=>`<button role="tab" aria-selected="${S.adm===k}" data-adm="${k}">${t(l)}</button>`).join('');
+ $$('[data-adm]').forEach(b=>b.onclick=()=>{S.adm=b.dataset.adm;renderAdmin()});
+ ADM.forEach(([k])=>$('#adm-'+k).classList.toggle('hide',k!==S.adm));
+ try{[DATA.orders,DATA.leads,DATA.questions]=await Promise.all([DB.listAll('orders'),DB.listAll('leads'),DB.listAll('questions')])}catch(e){toast(CORE.errMsg(e))}
+ const paid=DATA.orders.filter(o=>!['checkout','refunded','cancelled'].includes(o.status));
+ $('#admKpis').innerHTML=[['k_paid',paid.length],['k_rev',money(paid.reduce((a,o)=>a+(+o.price||0),0))],['k_leads',DATA.leads.length],['k_q',DATA.questions.length]].map(k=>`<div class="kpi"><span class="muted">${t(k[0])}</span><b>${k[1]}</b></div>`).join('');
+ if(S.adm==='orders'){$('#adm-orders').innerHTML=`<div class="row" style="margin-bottom:10px"><button class="btn l sm" id="xO">${t('export')}</button><span class="muted" style="font-size:13.5px">${t('adm_orders_note')}</span></div><div class="tw"><table><thead><tr><th>${t('th_date')}</th><th>${t('th_email')}</th><th>${t('th_prod')}</th><th>${t('th_status')}</th><th>${t('docs_link')}</th><th>${t('th_report')}</th></tr></thead><tbody>${DATA.orders.map(o=>`<tr><td>${fmtDate(o.ts)}<br><span class="muted" style="font-size:12px">${esc(o.id)}</span></td><td>${esc(o.email)}<br><span class="muted" style="font-size:12px">${esc(o.name||'')}</span></td><td>${esc(o.product)}<br><b>${money(o.price)}</b>${o.checkout_id?`<br><span class="muted" style="font-size:12px">${esc(o.checkout_id)}</span>`:''}</td><td><select data-ost="${o.id}" style="width:auto;padding:6px 8px;font-size:13.5px">${ST.map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${t('st_'+s)}</option>`).join('')}</select></td><td style="max-width:220px;word-break:break-all">${o.docs_link?`<a href="${esc(o.docs_link)}" target="_blank" rel="noopener">${esc(o.docs_link)}</a>`:'—'}${o.notes?`<br><span class="muted" style="font-size:12.5px">${esc(o.notes)}</span>`:''}</td><td><input data-orep="${o.id}" value="${esc(o.report_url||'')}" placeholder="https://..." style="min-width:160px;padding:6px 8px;font-size:13.5px"><button class="btn l sm" data-osave="${o.id}" style="margin-top:4px">${t('save')}</button></td></tr>`).join('')||`<tr><td colspan="6" class="muted">${t('empty')}</td></tr>`}</tbody></table></div>`;
+  $('#xO').onclick=()=>csvDl('alaprima-pedidos.csv',DATA.orders);
+  $$('[data-ost]').forEach(s=>s.onchange=async()=>{try{await DB.update('orders',s.dataset.ost,{status:s.value,updated:DB.now()});toast(t('saved'))}catch(e){toast(CORE.errMsg(e))}});
+  $$('[data-osave]').forEach(b=>b.onclick=async()=>{const v=$(`[data-orep="${b.dataset.osave}"]`).value.trim();try{await DB.update('orders',b.dataset.osave,{report_url:v,status:v?'delivered':'in_review',updated:DB.now()});toast(t('saved'));renderAdmin()}catch(e){toast(CORE.errMsg(e))}})}
+ if(S.adm==='leads'){$('#adm-leads').innerHTML=`<div class="row" style="margin-bottom:10px"><button class="btn l sm" id="xL">${t('export')}</button></div><div class="tw"><table><thead><tr><th>${t('th_date')}</th><th>${t('th_lead')}</th><th>${t('th_email')}</th><th>${t('th_city')}</th><th>${t('th_prof')}</th><th>${t('th_proc')}</th><th></th></tr></thead><tbody>${DATA.leads.map(l=>`<tr><td>${fmtDate(l.ts)}</td><td>${esc(l.name)}</td><td>${esc(l.email)}</td><td>${esc(l.city)} ${esc(l.country)}</td><td>${esc(l.profile)}</td><td>${esc(l.procedure)}<br><span class="muted" style="font-size:12px">${esc(l.source)} · ${esc((l.lang||'').toUpperCase())}</span></td><td><a class="btn l sm" href="mailto:${esc(l.email)}">✉</a></td></tr>`).join('')||`<tr><td colspan="7" class="muted">${t('empty')}</td></tr>`}</tbody></table></div>`;$('#xL').onclick=()=>csvDl('alaprima-contactos.csv',DATA.leads)}
+ if(S.adm==='questions'){$('#adm-questions').innerHTML=`<div class="row" style="margin-bottom:10px"><button class="btn l sm" id="xQ">${t('export')}</button></div><div class="tw"><table><thead><tr><th>${t('th_date')}</th><th>${t('th_email')}</th><th>${t('qf_q')}</th><th></th></tr></thead><tbody>${DATA.questions.map(q=>`<tr><td>${fmtDate(q.ts)}</td><td>${esc(q.name)}<br>${esc(q.email)}</td><td style="white-space:pre-wrap;max-width:520px">${esc(q.question)}</td><td><a class="btn l sm" href="mailto:${esc(q.email)}?subject=${encodeURIComponent('alaprima')}&body=${encodeURIComponent('\n\n> '+q.question)}">${t('reply')}</a></td></tr>`).join('')||`<tr><td colspan="4" class="muted">${t('empty')}</td></tr>`}</tbody></table></div>`;$('#xQ').onclick=()=>csvDl('alaprima-preguntas.csv',DATA.questions)}
+ if(S.adm==='outreach')renderLeads();
+}
+
+/* ================= IA (solo admin) ================= */
+const toB64=f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)});
+async function aiReview(){const key=store.get('key','');const R=S.current;const st=$('#aiStatus');
+ if(!key){st.innerHTML=`<div class="notice">${t('ai_need')}</div>`;return}
+ const docs=S.files.filter(f=>/pdf|image\/(png|jpe?g|webp|gif)/.test(f.type)).slice(0,8);
+ if(!docs.length){st.innerHTML=`<div class="notice">${t('ai_nofiles')}</div>`;return}
+ st.innerHTML=`<div class="notice">${t('ai_run')}</div>`;$('#aiBtn').disabled=true;
+ try{const p=S.proc;const content=[];
+  for(const f of docs){const d=await toB64(f);content.push(f.type==='application/pdf'?{type:'document',source:{type:'base64',media_type:'application/pdf',data:d},title:f.name}:{type:'image',source:{type:'base64',media_type:f.type==='image/jpg'?'image/jpeg':f.type,data:d}})}
+  const lname={es:'Spanish',en:'English',pt:'Portuguese',fr:'French'}[S.lang];
+  content.push({type:'text',text:`You are a meticulous permit pre-check reviewer.\nPermit: ${p.t.en} (${p.place}). City: ${R.city}.\nRequired documents:\n${p.reqs.map(r=>'- '+r.o+(r.c?' [critical]':'')).join('\n')}\nCommon corrections to look for:\n${p.qs.map(q=>'- '+q.obs).join('\n')}\nFiles attached: ${docs.map(f=>f.name).join(', ')}.\nReview the attached documents. Identify missing documents, inconsistencies between documents (areas, names, addresses, dates), missing scale/north/dimensions/signatures, expired certificates, and likely corrections. Be specific and cite the file name. Never claim approval.\nRespond ONLY with JSON, no markdown: {"summary":"2 sentences in ${lname}","findings":[{"type":"missing|likely|verify|ok","item":"short title in ${lname}","detail":"what you saw, file name","fix":"how to fix in ${lname}"}]}`});
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:store.get('model','claude-sonnet-4-6'),max_tokens:4000,messages:[{role:'user',content}]})});
+  const data=await r.json();if(!r.ok)throw new Error(data.error?data.error.message:r.status);
+  const txt=data.content.filter(c=>c.type==='text').map(c=>c.text).join('').replace(/```json|```/g,'').trim();
+  R.ai=JSON.parse(txt.slice(txt.indexOf('{'),txt.lastIndexOf('}')+1));await saveReport(R);renderReport(R);st.innerHTML=`<div class="notice" style="background:#E5F5EE;color:#0B6B47">${t('ai_done')}</div>`}
+ catch(e){st.innerHTML=`<div class="err">${esc(t('ai_fail',{e:e.message}))}</div>`}finally{$('#aiBtn').disabled=false}}
+
+/* ================= PROSPECCIÓN (solo admin, local) ================= */
+function parseCSV(text){text=text.replace(/^﻿/,'');const rows=[];let row=[],cur='',q=false;for(let i=0;i<text.length;i++){const c=text[i];if(q){if(c==='"'&&text[i+1]==='"'){cur+='"';i++}else if(c==='"')q=false;else cur+=c}else{if(c==='"')q=true;else if(c===','){row.push(cur);cur=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cur);rows.push(row);row=[];cur=''}else cur+=c}}if(cur||row.length){row.push(cur);rows.push(row)}
+ const h=rows.shift().map(x=>x.trim().toLowerCase());return rows.filter(r=>r.length>1).map(r=>Object.fromEntries(h.map((k,i)=>[k,(r[i]||'').trim()])))}
+const toCSV=a=>{if(!a.length)return '';const k=Object.keys(a[0]);return [k.join(','),...a.map(o=>k.map(x=>'"'+String(o[x]??'').replace(/"/g,'""')+'"').join(','))].join('\n')};
+function dl(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+function leadLang(l){return l.lang&&MAIL[l.lang]?l.lang:(CLANG[(l.country_code||l.country||'').toUpperCase()]||'es')}
+function mailFor(l){const L=leadLang(l),m=MAIL[L];const site=CFG.SITE_URL||location.origin;const sig=store.get('sender','')||('Michell Anyosa · alaprima\n'+site);
+ const city=l.city||l.country||'';const nm=l.contact_name?' '+l.contact_name.split(' ')[0]:'';const biz=l.name||l.website||({es:'tu estudio',en:'your firm',pt:'o seu escritório',fr:'votre agence'}[L]);
+ const f=s=>s.replaceAll('{city}',city).replaceAll('{nm}',nm).replaceAll('{biz}',biz).replaceAll('{sig}',sig);return {s:f(m.s),b:f(m.b),L}}
+function renderLeads(){const all=store.get('leads',[]);const fc=$('#fCountry').value,fs=$('#fStatus').value,q=norm($('#fSearch').value||'');
+ const countries=[...new Set(all.map(l=>l.country_code||l.country).filter(Boolean))].sort();
+ $('#fCountry').innerHTML=`<option value="">${t('all')} (${all.length})</option>`+countries.map(c=>`<option ${c===fc?'selected':''}>${esc(c)}</option>`).join('');
+ const sts=['new','sent','reply','won','lost'];$('#fStatus').innerHTML=`<option value="">${t('all')}</option>`+sts.map(s=>`<option value="${s}" ${s===fs?'selected':''}>${t('st_'+s)}</option>`).join('');
+ let L=all.filter(l=>(!fc||(l.country_code||l.country)===fc)&&(!fs||(l.status||'new')===fs)&&(!q||norm(Object.values(l).join(' ')).includes(q)));
+ const per=100,pg=Math.min(S.leadPage,Math.max(0,Math.ceil(L.length/per)-1));const page=L.slice(pg*per,pg*per+per);
+ $('#leadBody').innerHTML=page.map(l=>`<tr><td><b>${esc(l.name||'—')}</b><br><span class="muted" style="font-size:12.5px">${esc(l.category||'')} ${l.website?'· <a href="'+esc(l.website)+'" target="_blank" rel="noopener">web</a>':''}</span></td><td>${esc(l.email)}</td><td>${esc(l.city||'')}<br><span class="muted">${esc(l.country_code||l.country||'')}</span></td><td>${leadLang(l).toUpperCase()}</td><td><select data-st="${esc(l.email)}" style="width:auto;padding:6px 8px;font-size:13.5px">${sts.map(s=>`<option value="${s}" ${(l.status||'new')===s?'selected':''}>${t('st_'+s)}</option>`).join('')}</select></td><td style="white-space:nowrap"><button class="btn sm" data-gm="${esc(l.email)}">${t('gmail')}</button> <button class="btn l sm" data-cp="${esc(l.email)}">${t('copy')}</button></td></tr>`).join('')||`<tr><td colspan="6" class="muted">${t('empty')}</td></tr>`;
+ $('#leadPager').innerHTML=L.length>per?`${pg*per+1}–${Math.min(L.length,pg*per+per)} / ${L.length} <button class="btn l sm" id="pPrev">‹</button> <button class="btn l sm" id="pNext">›</button>`:'';
+ if($('#pPrev')){$('#pPrev').onclick=()=>{S.leadPage=Math.max(0,pg-1);renderLeads()};$('#pNext').onclick=()=>{S.leadPage=pg+1;renderLeads()}}
+ const cnt=s=>all.filter(l=>(l.status||'new')===s).length;
+ $('#kpis').innerHTML=[['k_total',all.length],['k_sent',cnt('sent')+cnt('reply')+cnt('won')+cnt('lost')],['k_reply',cnt('reply')+cnt('won')],['k_won',cnt('won')]].map(k=>`<div class="kpi"><span class="muted">${t(k[0])}</span><b>${k[1]}</b></div>`).join('');
+ const today=new Date().toISOString().slice(0,10);$('#todayCount').textContent=t('today',{n:all.filter(l=>(l.sent_at||'').startsWith(today)).length});
+ const upd=(email,patch)=>{const A=store.get('leads',[]);const x=A.find(z=>z.email===email);if(x)Object.assign(x,patch);store.set('leads',A);renderLeads()};
+ $$('[data-st]').forEach(s=>s.onchange=()=>upd(s.dataset.st,{status:s.value}));
+ $$('[data-gm]').forEach(b=>b.onclick=()=>{const l=all.find(z=>z.email===b.dataset.gm);const m=mailFor(l);window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(l.email)}&su=${encodeURIComponent(m.s)}&body=${encodeURIComponent(m.b)}`,'_blank');upd(l.email,{status:(l.status&&l.status!=='new')?l.status:'sent',sent_at:new Date().toISOString()})});
+ $$('[data-cp]').forEach(b=>b.onclick=()=>{const l=all.find(z=>z.email===b.dataset.cp);const m=mailFor(l);navigator.clipboard.writeText('Subject: '+m.s+'\n\n'+m.b).then(()=>toast(t('copied')))})}
+
+/* ================= EVENTOS ================= */
+$$('.views button').forEach(b=>b.onclick=()=>view(b.dataset.view));
+$$('.lang button').forEach(b=>b.onclick=()=>{S.lang=b.dataset.l;applyI18n()});
+$('#to2').onclick=()=>{renderReqs();go(2)};$('#to3').onclick=()=>{renderQs();go(3)};
+$$('[data-back]').forEach(b=>b.onclick=()=>go(+b.dataset.back));
+$('#to4').onclick=async()=>{const R=compute();S.current=R;go(4);renderReport(R);$('#aiStatus').innerHTML='';if(user())await saveReport(R)};
+$('#newBtn').onclick=()=>{S.proc=null;S.files=[];S.assign={};S.ans={};S.current=null;$('#city').value='';$('#project').value='';$('#to2').disabled=true;renderProcs();go(1)};
+$('#pdfBtn').onclick=()=>window.print();
+$('#aiBtn').onclick=aiReview;
+const drop=$('#drop'),fin=$('#files');drop.onclick=()=>fin.click();drop.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fin.click()}};fin.onchange=()=>addFiles(fin.files);
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')}));['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')}));drop.addEventListener('drop',e=>addFiles(e.dataTransfer.files));
+$('#csvIn').onchange=async e=>{const f=e.target.files[0];if(!f)return;const rows=parseCSV(await f.text()).filter(r=>r.email&&/@/.test(r.email));const A=store.get('leads',[]);const have=new Set(A.map(x=>x.email.toLowerCase()));let n=0;rows.forEach(r=>{if(!have.has(r.email.toLowerCase())){r.status='new';A.push(r);have.add(r.email.toLowerCase());n++}});store.set('leads',A);toast('+'+n);renderLeads();e.target.value=''};
+['fCountry','fStatus'].forEach(id=>$('#'+id).onchange=()=>{S.leadPage=0;renderLeads()});$('#fSearch').oninput=()=>{S.leadPage=0;renderLeads()};
+$('#expCsv').onclick=()=>dl('alaprima-prospectos.csv',toCSV(store.get('leads',[])),'text/csv');
+$('#saveKey').onclick=()=>{store.set('key',$('#apiKey').value.trim());store.set('model',$('#model').value.trim()||'claude-sonnet-4-6');toast(t('saved'))};
+$('#clearKey').onclick=()=>{store.set('key','');$('#apiKey').value='';toast(t('saved'))};
+$('#saveSender').onclick=()=>{store.set('sender',$('#sender').value);toast(t('saved'))};
+$('#expAll').onclick=()=>dl('alaprima-prospectos-backup.json',JSON.stringify({leads:store.get('leads',[]),sender:store.get('sender','')}),'application/json');
+$('#impAll').onchange=async e=>{try{const j=JSON.parse(await e.target.files[0].text());if(j.leads)store.set('leads',j.leads);if(j.sender)store.set('sender',j.sender);renderLeads();toast(t('saved'))}catch(err){toast(t('ai_fail',{e:err.message}))}};
+
+/* ================= INICIO ================= */
+(async function(){const q=new URLSearchParams(location.search);let s=null;try{s=localStorage.getItem('ap_lang')}catch(e){}const n=(navigator.language||'es').slice(0,2);S.lang=[q.get('lang'),s,n].find(x=>x&&I18N[x])||'es';
+ $('#apiKey').value=store.get('key','');$('#model').value=store.get('model','claude-sonnet-4-6');$('#sender').value=store.get('sender','');
+ renderLogos();applyI18n();go(1);
+ CORE.mountAccount($('#acct'),{onNav:v=>view(v)});
+ const h=location.hash.slice(1);view(['check','reports','orders','admin'].includes(h)?h:'check');
+ await CORE.ready;
+ CORE.onAuth(async u=>{$('#navAdmin').classList.toggle('hide',!CORE.isAdmin());if(u&&S.current&&!S.current.docId&&S.step===4){await saveReport(S.current);renderReport(S.current)}else if(S.step===4&&S.current)renderReport(S.current);refreshView()});
+ const r=await CORE.handleReturn(RET);
+ if(r&&r.needLogin){view('orders');CORE.openAuth('login',async()=>{const x=await CORE.handleReturn(RET);if(x&&x.orderId){S.paidOrder=x.orderId;view('orders')}})}
+ else if(r&&r.orderId){S.paidOrder=r.orderId;view('orders')}
+})();
+</script>
+</body>
+</html>

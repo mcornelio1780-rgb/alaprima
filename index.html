@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>alaprima · Aprobado a la primera</title>
+<meta name="description" content="Pre-revisión de expedientes de permisos y licencias con IA y revisión humana. Informe de faltantes en 24 h. Español, English, Português, Français.">
+<meta property="og:title" content="alaprima · Aprobado a la primera">
+<meta property="og:description" content="Sabe antes de presentar qué te van a observar.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{--cob:#2340D8;--deep:#142A8C;--gra:#14171F;--cal:#EEF0F3;--res:#F4E04D;--verde:#12A06B;--rojo:#D93A3A;--niebla:#C9D1E4;--t2:#4A5163;
+--f:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(76px + env(safe-area-inset-top,0px))}
+body{margin:0;font-family:var(--f);background:var(--cal);color:var(--gra);font-size:18px;line-height:1.55;-webkit-font-smoothing:antialiased}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+a{color:inherit}
+img,svg{max-width:100%}
+.c{width:min(1240px,100% - 40px);margin-inline:auto}
+:focus-visible{outline:3px solid var(--res);outline-offset:3px;border-radius:4px}
+/* nav */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(238,240,243,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,209,228,.7)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:rgba(238,240,243,.88);backdrop-filter:blur(12px)}
+header .c{display:flex;align-items:center;gap:24px;height:68px}
+header .lg{width:138px;display:block;flex:none}
+#acct{display:flex;align-items:center}
+.lang.mlang{display:none}
+@media(max-width:980px){nav.open .lang.mlang{display:inline-flex;align-self:flex-start;margin-top:6px}}
+@media(max-width:640px){header .c{gap:12px}header .c>.lang{display:none}header .lg{width:112px}.menu{font-size:15px}}
+header nav{display:flex;gap:22px;margin-left:auto;font-size:15.5px}
+header nav a{text-decoration:none;color:var(--t2)}header nav a:hover{color:var(--gra)}
+.lang{display:flex;border:1px solid var(--niebla);border-radius:999px;padding:3px;background:#fff}
+.lang button{border:0;background:none;font:inherit;font-size:13px;font-weight:600;padding:5px 9px;border-radius:999px;cursor:pointer;color:var(--t2)}
+.lang button[aria-pressed=true]{background:var(--gra);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:14px;background:var(--cob);color:#fff;text-decoration:none;font-weight:700;font-size:16.5px;border:0;cursor:pointer;font-family:inherit;transition:transform .15s,background .15s}
+.btn:hover{background:var(--deep)}.btn:active{transform:scale(.98)}
+.btn.y{background:var(--res);color:var(--gra)}.btn.y:hover{background:#E8D23A}
+.btn.ghost{background:transparent;color:var(--gra);border:1.5px solid var(--gra)}
+.btn.sm{padding:10px 16px;font-size:15px;border-radius:12px}
+.menu{display:none;background:none;border:0;font:inherit;font-weight:700;cursor:pointer}
+@media(max-width:980px){header nav{display:none}header nav.open{display:flex;position:absolute;top:68px;left:0;right:0;flex-direction:column;background:#fff;padding:20px;border-bottom:1px solid var(--niebla)}.menu{display:block;margin-left:auto}.hdr-cta{display:none}}
+/* hero */
+.hero{padding:clamp(48px,8vw,110px) 0 40px}
+.hero .c{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(52px,8.6vw,132px);line-height:.9;letter-spacing:-.055em;margin:0 0 26px;font-weight:900}
+.hero p.sub{font-size:clamp(19px,1.7vw,24px);color:var(--t2);max-width:34ch;margin:0 0 32px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero .note{font-size:14.5px;color:var(--t2);margin-top:16px}
+.tile{width:100%;max-width:400px;justify-self:end}
+.tile svg{width:100%;height:auto;overflow:visible}
+.morph{transform-box:fill-box;transform-origin:50% 50%;animation:morph 2.6s cubic-bezier(.75,0,.2,1) .6s both}
+@keyframes morph{0%,20%{transform:scaleX(-1) rotate(138.9deg)}100%{transform:none}}
+.tilecap{font-size:14px;color:var(--t2);text-align:right;margin-top:8px}
+@media(max-width:860px){.hero .c{grid-template-columns:1fr}.tile{justify-self:start;max-width:200px;order:-1}.tilecap{text-align:left}}
+/* marquee */
+.mq{border-block:1px solid var(--niebla);overflow:hidden;background:#fff}
+.mq .row{display:flex;gap:48px;padding:18px 0;white-space:nowrap;width:max-content;animation:mq 60s linear infinite}
+.mq span{font-size:19px;font-weight:600;letter-spacing:-.01em}.mq span i{font-style:normal;color:var(--t2);font-weight:400}
+@keyframes mq{to{transform:translateX(-50%)}}
+/* sections */
+section{padding:clamp(70px,9vw,130px) 0}
+.kicker{font-size:15px;color:var(--t2);margin:0 0 16px;font-weight:600}
+h2{font-size:clamp(38px,5.6vw,80px);line-height:.98;letter-spacing:-.045em;margin:0 0 24px;font-weight:900;max-width:15ch}
+.lead{font-size:clamp(19px,1.6vw,23px);color:var(--t2);max-width:52ch;margin:0}
+/* problem */
+.prob{background:var(--gra);color:#fff}
+.prob .lead{color:#C9D1E4}
+.dim{margin-top:56px}
+.dim svg{width:100%;height:auto}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:56px}
+.stats div{border-top:2px solid var(--res);padding-top:14px}
+.stats b{display:block;font-size:clamp(40px,4.4vw,64px);font-weight:900;letter-spacing:-.05em;line-height:1;color:#fff;margin-bottom:10px}
+.stats span{color:#DDE2EC;font-size:16px}
+.src{font-size:13px;color:#9AA3B8;margin-top:22px;max-width:90ch}
+.src a{color:#C9D1E4}
+.solve{margin-top:56px;padding:28px;border-radius:20px;background:rgba(255,255,255,.06);font-size:clamp(19px,1.6vw,23px);color:#fff;max-width:60ch}
+@media(max-width:900px){.stats{grid-template-columns:1fr 1fr}}
+.prob .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:48px}
+.prob .facts div{border-top:1px solid #3A3F4D;padding-top:16px;color:#DDE2EC;font-size:17px}
+.prob .facts b{display:block;color:#fff;font-size:21px;margin-bottom:6px;letter-spacing:-.01em}
+@media(max-width:800px){.prob .facts{grid-template-columns:1fr}}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:56px;border-top:2px solid var(--gra)}
+.steps li{list-style:none;padding:26px 26px 10px 0}
+.steps li+li{padding-left:26px;border-left:1px solid var(--niebla)}
+.steps .n{font-size:64px;font-weight:900;letter-spacing:-.05em;line-height:1;color:var(--cob)}
+.steps h3{font-size:25px;letter-spacing:-.02em;margin:14px 0 8px}
+.steps p{color:var(--t2);margin:0;font-size:17px}
+@media(max-width:860px){.steps{grid-template-columns:1fr}.steps li+li{border-left:0;padding-left:0;border-top:1px solid var(--niebla)}}
+/* checks */
+.checks{background:#fff}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:40px 0 24px}
+.tabs button{border:1.5px solid var(--niebla);background:#fff;font:inherit;font-size:15.5px;padding:9px 15px;border-radius:999px;cursor:pointer;font-weight:600}
+.tabs button[aria-selected=true]{background:var(--gra);color:#fff;border-color:var(--gra)}
+.tp{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media(max-width:860px){.tp{grid-template-columns:1fr}}
+.list{list-style:none;padding:0;margin:0}
+.list li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #E4E8F0;font-size:16.5px}
+.list li svg{flex:none;margin-top:3px}
+.obs{background:var(--cal);border-radius:20px;padding:26px}
+.obs h4{margin:0 0 12px;font-size:19px}
+.hl{background:linear-gradient(transparent 55%,var(--res) 55%,var(--res) 92%,transparent 92%)}
+/* report */
+.rep .c{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+@media(max-width:900px){.rep .c{grid-template-columns:1fr}}
+.paper{background:#fff;border-radius:8px;box-shadow:0 40px 80px -40px rgba(20,42,140,.45);padding:clamp(22px,4vw,40px);font-size:15.5px;transform:rotate(-1.2deg)}
+.paper .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-size:13px;color:var(--t2)}
+.paper .hd span:first-child{width:120px;display:block}
+.meter{height:10px;background:#E4E8F0;border-radius:6px;overflow:hidden;margin:12px 0 6px}.meter i{display:block;height:100%;width:68%;background:var(--verde)}
+.item{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:11px 0;border-top:1px solid #E4E8F0}
+.st{font-size:13px;font-weight:700}.st.m{color:var(--rojo)}.st.p{color:#9A7A00}.st.ok{color:var(--verde)}
+.stamp{width:110px;height:110px;border-radius:50%;border:3px solid var(--cob);display:grid;place-items:center;color:var(--cob);text-align:center;font-weight:800;font-size:11px;transform:rotate(-8deg);position:relative;margin-left:auto}
+.stamp::before{content:"";position:absolute;inset:6px;border:1.5px dashed var(--cob);border-radius:50%}
+/* who */
+.who .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:48px}
+@media(max-width:980px){.who .grid{grid-template-columns:1fr 1fr}}@media(max-width:560px){.who .grid{grid-template-columns:1fr}}
+.who article{background:#fff;border-radius:22px;padding:26px;border:1px solid #DDE2EC}
+.who article:nth-child(2){border-radius:22px 22px 22px 4px}
+.who article svg{margin-bottom:16px}
+.who h3{margin:0 0 8px;font-size:21px;letter-spacing:-.02em}.who p{margin:0;color:var(--t2);font-size:16.5px}
+/* pricing */
+.pricing{background:var(--cob);color:#fff;background-image:linear-gradient(rgba(201,209,228,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(201,209,228,.1) 1px,transparent 1px);background-size:28px 28px}
+.pricing .lead{color:#DDE3F5}
+.reg{display:inline-flex;background:rgba(255,255,255,.12);border-radius:999px;padding:4px;margin:34px 0 28px;flex-wrap:wrap}
+.reg button{border:0;background:none;color:#fff;font:inherit;font-size:15px;font-weight:600;padding:8px 16px;border-radius:999px;cursor:pointer}
+.reg button[aria-pressed=true]{background:#fff;color:var(--cob)}
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:1060px){.plans{grid-template-columns:1fr 1fr}}@media(max-width:560px){.plans{grid-template-columns:1fr}}
+.plan{background:#fff;color:var(--gra);border-radius:22px;padding:26px;display:flex;flex-direction:column}
+.plan.f{background:var(--res)}
+.plan h3{margin:0 0 6px;font-size:20px}.plan .pr{font-size:48px;font-weight:900;letter-spacing:-.05em;line-height:1;margin:14px 0 4px}
+.plan .pr small{font-size:16px;font-weight:600;letter-spacing:0}
+.plan p{font-size:15.5px;color:var(--t2);margin:0 0 18px}.plan.f p{color:#3A3A20}
+.plan ul{padding:0;margin:0 0 22px;list-style:none;font-size:15px}.plan li{padding:5px 0 5px 24px;position:relative}
+.plan li::before{content:"";position:absolute;left:2px;top:12px;width:10px;height:6px;border-left:2.5px solid var(--verde);border-bottom:2.5px solid var(--verde);transform:rotate(-45deg)}
+.plan .btn{margin-top:auto}
+.pnote{font-size:14px;color:#DDE3F5;margin-top:20px;max-width:80ch}
+/* lead */
+.leadf .c{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+@media(max-width:900px){.leadf .c{grid-template-columns:1fr}}
+form{background:#fff;border-radius:24px;padding:30px;border:1px solid #DDE2EC;display:grid;gap:14px}
+label{font-size:14.5px;font-weight:600;display:grid;gap:6px}
+input,select,textarea{font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1.5px solid #CDD3E0;background:#fff;color:var(--gra);width:100%}
+input:focus,select:focus{border-color:var(--cob);outline:none;box-shadow:0 0 0 3px rgba(35,64,216,.18)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:520px){.row2{grid-template-columns:1fr}}
+.ok-msg{display:none;background:#E5F5EE;color:#0B6B47;border-radius:12px;padding:14px;font-size:15.5px}
+.consent{font-weight:400;font-size:13.5px;color:var(--t2);display:flex;gap:10px;align-items:flex-start}.consent input{width:auto;margin-top:3px}
+/* faq */
+details{border-top:1px solid var(--niebla);padding:20px 0}
+details:last-child{border-bottom:1px solid var(--niebla)}
+summary{cursor:pointer;font-size:20px;font-weight:700;letter-spacing:-.01em;list-style:none;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-weight:400;font-size:26px;line-height:1}details[open] summary::after{content:"–"}
+details p{color:var(--t2);max-width:70ch;margin:12px 0 0}
+.qbox{margin-top:48px;background:#fff;border-radius:24px;padding:28px;border:1px solid #DDE2EC;display:grid;gap:14px;max-width:820px}
+.qbox h3{margin:0;font-size:24px;letter-spacing:-.02em}.muted2{margin:0;color:var(--t2)}
+textarea{resize:vertical}
+.legal-links a{margin-right:2px}
+.final{background:var(--gra);color:#fff;text-align:left}
+.final h2{max-width:12ch}
+footer{padding:44px 0 calc(44px + env(safe-area-inset-bottom,0px));font-size:14px;color:var(--t2)}
+footer .c{display:grid;grid-template-columns:1fr 2fr;gap:30px}
+footer .lg{width:130px;display:block;margin-bottom:12px}
+@media(max-width:760px){footer .c{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+ <div class="c">
+  <a href="#top" aria-label="alaprima"><span class="lg" data-logo="hz"></span></a>
+  <nav id="nav"><a href="#how" data-i="nav_how"></a><a href="#checks" data-i="nav_checks"></a><a href="#pricing" data-i="nav_pricing"></a><a href="#faq" data-i="nav_faq"></a><div class="lang mlang" role="group" aria-label="Idioma"><button data-l="es">ES</button><button data-l="en">EN</button><button data-l="pt">PT</button><button data-l="fr">FR</button></div></nav>
+  <button class="menu" aria-expanded="false" aria-controls="nav" onclick="toggleNav(this)" data-i="menu"></button>
+  <div class="lang" role="group" aria-label="Idioma / Language">
+   <button data-l="es">ES</button><button data-l="en">EN</button><button data-l="pt">PT</button><button data-l="fr">FR</button>
+  </div>
+  <span id="acct"></span>
+  <a class="btn sm hdr-cta app-link" data-i="cta_try"></a>
+ </div>
+</header>
+<main id="top">
+<section class="hero" style="padding-bottom:50px">
+ <div class="c">
+  <div>
+   <h1 data-i="h1"></h1>
+   <p class="sub" data-i="sub"></p>
+   <div class="ctas"><a class="btn app-link" data-i="cta_try"></a><a class="btn ghost" href="#pricing" data-i="cta_pricing"></a></div>
+   <p class="note" data-i="note"></p>
+  </div>
+  <div><div class="tile" id="tile"></div><p class="tilecap" data-i="tilecap"></p></div>
+ </div>
+</section>
+<div class="mq" aria-hidden="true"><div class="row" id="mq"></div></div>
+
+<section class="prob" id="problem">
+ <div class="c">
+  <p class="kicker" style="color:#C9D1E4" data-i="p_k"></p>
+  <h2 data-i="p_h"></h2>
+  <p class="lead" data-i="p_l"></p>
+  <div class="stats"><div><b>37%</b><span data-i="st1"></span></div><div><b data-i="n2"></b><span data-i="st2"></span></div><div><b>73 → 32</b><span data-i="st3"></span></div><div><b data-i="n4"></b><span data-i="st4"></span></div></div>
+  <p class="src"><span data-i="st_src"></span> <a href="https://stateline.org/2026/08/20/cities-turn-to-ai-to-speed-housing-permitting/" target="_blank" rel="noopener">Stateline, 2026</a> · <a href="https://eyeonhousing.org/2026/06/home-building-regulatory-cost-burdens-increased-40-from-2021-to-2026" target="_blank" rel="noopener">NAHB, 2026</a></p>
+  <div class="dim" id="dim"></div>
+  <p class="solve" data-i="solve"></p>
+  <div class="facts"><div><b data-i="f1h"></b><span data-i="f1"></span></div><div><b data-i="f2h"></b><span data-i="f2"></span></div><div><b data-i="f3h"></b><span data-i="f3"></span></div></div>
+ </div>
+</section>
+
+<section id="how">
+ <div class="c">
+  <p class="kicker" data-i="h_k"></p>
+  <h2 data-i="h_h"></h2>
+  <ol class="steps" style="padding:0">
+   <li><div class="n">1</div><h3 data-i="s1h"></h3><p data-i="s1"></p></li>
+   <li><div class="n">2</div><h3 data-i="s2h"></h3><p data-i="s2"></p></li>
+   <li><div class="n">3</div><h3 data-i="s3h"></h3><p data-i="s3"></p></li>
+  </ol>
+ </div>
+</section>
+
+<section class="checks" id="checks">
+ <div class="c">
+  <p class="kicker" data-i="c_k"></p>
+  <h2 data-i="c_h"></h2>
+  <p class="lead" data-i="c_l"></p>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="tp" id="tp"></div>
+ </div>
+</section>
+
+<section class="rep">
+ <div class="c">
+  <div>
+   <p class="kicker" data-i="r_k"></p>
+   <h2 data-i="r_h"></h2>
+   <p class="lead" data-i="r_l"></p>
+   <p style="margin-top:28px"><a class="btn app-link" data-i="cta_try"></a></p>
+  </div>
+  <div class="paper" id="paper"></div>
+ </div>
+</section>
+
+<section class="who">
+ <div class="c">
+  <p class="kicker" data-i="w_k"></p>
+  <h2 data-i="w_h"></h2>
+  <div class="grid" id="who"></div>
+ </div>
+</section>
+
+<section class="pricing" id="pricing">
+ <div class="c">
+  <p class="kicker" style="color:#DDE3F5" data-i="pr_k"></p>
+  <h2 data-i="pr_h"></h2>
+  <p class="lead" data-i="pr_l"></p>
+  <div class="reg" role="group" id="reg"></div>
+  <div class="plans" id="plans"></div>
+  <p class="pnote" data-i="pr_note"></p>
+ </div>
+</section>
+
+<section class="leadf" id="contact">
+ <div class="c">
+  <div>
+   <p class="kicker" data-i="l_k"></p>
+   <h2 data-i="l_h"></h2>
+   <p class="lead" data-i="l_l"></p>
+  </div>
+  <form id="leadForm" novalidate>
+   <div class="row2"><label><span data-i="fm_name"></span><input name="name" required autocomplete="name"></label><label><span data-i="fm_email"></span><input name="email" type="email" required autocomplete="email"></label></div>
+   <div class="row2"><label><span data-i="fm_country"></span><select name="country" id="countrySel" required></select></label><label><span data-i="fm_city"></span><input name="city" autocomplete="address-level2"></label></div>
+   <label><span data-i="fm_profile"></span><select name="profile" id="profileSel"></select></label>
+   <label><span data-i="fm_proc"></span><input name="procedure" id="procIn"></label>
+   <label class="consent"><input type="checkbox" name="consent" required><span data-i="fm_consent"></span></label>
+   <button class="btn" type="submit" data-i="fm_send"></button>
+   <div class="ok-msg" id="okMsg" role="status"></div>
+  </form>
+ </div>
+</section>
+
+<section id="faq">
+ <div class="c">
+  <p class="kicker" data-i="q_k"></p>
+  <h2 data-i="q_h"></h2>
+  <div id="faqs"></div>
+  <form class="qbox" id="qForm" novalidate>
+   <h3 data-i="qf_h"></h3><p class="muted2" data-i="qf_p"></p>
+   <div class="row2"><label><span data-i="fm_name"></span><input name="name" autocomplete="name"></label><label><span data-i="fm_email"></span><input name="email" type="email" required autocomplete="email"></label></div>
+   <label><span data-i="qf_q"></span><textarea name="question" rows="4" required maxlength="2000"></textarea></label>
+   <button class="btn" type="submit" data-i="qf_send"></button>
+   <div class="ok-msg" id="qOk" role="status"></div>
+  </form>
+ </div>
+</section>
+
+<section class="final">
+ <div class="c">
+  <h2 data-i="fin_h"></h2>
+  <p class="lead" style="color:#C9D1E4;margin-bottom:30px" data-i="fin_l"></p>
+  <a class="btn y app-link" data-i="cta_try"></a>
+ </div>
+</section>
+</main>
+<footer>
+ <div class="c">
+  <div><span class="lg" data-logo="hz"></span><span data-i="foot_tag"></span><br>© 2026 alaprima</div>
+  <div><p data-i="foot_disc" style="margin-top:0"></p>
+   <p class="legal-links"><a class="lg-link" data-h="terminos" data-i="lg_terms"></a> · <a class="lg-link" data-h="privacidad" data-i="lg_priv"></a> · <a class="lg-link" data-h="ia" data-i="lg_ai"></a><span id="mailWrap"></span></p>
+   <p><span data-i="foot_co"></span> <b>Limly LLC</b> · 8 The Green, Suite B, Dover, DE 19901, USA</p></div>
+ </div>
+</footer>
+<script src="assets/config.js"></script>
+<script src="assets/brand.js"></script>
+<script src="assets/core.js"></script>
+<script>
+const CFG=window.ALAPRIMA_CONFIG;
+const I18N={
+es:{qf_h:'¿Tienes otra pregunta?',qf_p:'Escríbenos y te respondemos por correo en menos de 24 horas.',qf_q:'Tu pregunta',qf_send:'Enviar pregunta',qf_ok:'Recibimos tu pregunta. Te respondemos por correo pronto.',qf_err:'Escribe un correo válido y tu pregunta.',lg_terms:'Términos y condiciones',lg_priv:'Privacidad de datos',lg_ai:'Uso de IA y regulación',foot_co:'alaprima es un producto de',n2:'3,4 → 1,4',n4:'26,4%',st1:'de las solicitudes se aprueba en la primera ronda en Denver (EE.UU.).',st2:'ciclos de revisión por solicitud en Honolulu, antes y después de pre-revisar con IA.',st3:'días de trámite promedio en Honolulu tras pre-revisar los expedientes.',st4:'del precio de una casa nueva en EE.UU. ya es costo regulatorio.',st_src:'Datos de ciudades de EE.UU. En Lima un expediente suele pasar 2 a 3 ciclos de observaciones; en Francia, desde agosto de 2026, un dossier incompleto puede ser rechazado directamente. Fuentes:',solve:'Las ciudades que revisan con IA ya redujeron a un tercio las correcciones. Pero solo lo usan unas pocas ciudades, y la herramienta es de la municipalidad. alaprima pone esa misma revisión en tus manos, antes de presentar, en cualquier ciudad y en tu idioma.',nav_how:'Cómo funciona',nav_checks:'Qué revisamos',nav_pricing:'Precios',nav_faq:'Preguntas',menu:'Menú',cta_try:'Revisar mi expediente gratis',cta_pricing:'Ver precios',
+h1:'Aprobado a la primera.',sub:'Revisamos tu expediente de licencia o permiso antes de que lo presentes. Sabes qué te van a observar y lo arreglas a tiempo.',note:'Autorrevisión gratis en 5 minutos. Informe con revisión humana en 24 h.',tilecap:'Un 1 que se vuelve ✓: primera ronda, aprobado.',
+p_k:'El problema',p_h:'Cada observación es otra ronda. Cada ronda, semanas.',p_l:'Muchos expedientes vuelven por cosas pequeñas: un plano sin escala, un certificado vencido, una firma que falta. Te enteras cuando ya perdiste la ronda.',
+f1h:'Faltantes de forma',f1:'Documentos que no estaban, copias sin firmar, formatos antiguos.',f2h:'Datos que no cuadran',f2:'El área del plano no coincide con la del formulario o la partida.',f3h:'Norma que cambió',f3:'Requisitos actualizados en el TUPA, la ordenanza o el código local.',
+h_k:'Cómo funciona',h_h:'Tres pasos antes de ir a la ventanilla.',s1h:'Sube tu expediente',s1:'Elige tu ciudad y el trámite. Sube planos, formularios y certificados en PDF o foto.',s2h:'Revisamos contra la norma',s2:'La IA compara cada documento con los requisitos locales y un revisor humano valida el informe.',s3h:'Presenta con todo en regla',s3:'Recibes la lista de faltantes y observaciones probables, ordenada por urgencia, con cómo arreglar cada una.',
+c_k:'Qué revisamos',c_h:'Tu trámite, en tu ciudad.',c_l:'Empezamos con los trámites que más se observan. Si el tuyo no está, escríbenos: lo indexamos.',
+r_k:'El informe',r_h:'Claro, priorizado, accionable.',r_l:'No es un PDF de 40 páginas. Es la lista exacta de lo que falta y de lo que te pueden observar, con el porcentaje de preparación del expediente.',
+w_k:'Para quién',w_h:'Para quien tramita y no quiere volver.',
+pr_k:'Precios',pr_h:'Paga por expediente. Sin contratos.',pr_l:'Precios en dólares, ajustados por región. Cobramos con Polar: tarjeta internacional, impuestos incluidos según tu país.',
+pr_note:'La autorrevisión del checklist es gratis siempre. Los planes pagados incluyen lectura de tus documentos con IA y validación de un revisor. alaprima no reemplaza la firma de un profesional colegiado y la aprobación la otorga la autoridad.',
+l_k:'Checklist gratis',l_h:'Recibe la lista oficial de tu trámite.',l_l:'Te enviamos el checklist actualizado de tu ciudad y trámite, con los errores que más se observan. Sin costo.',
+fm_name:'Nombre',fm_email:'Correo',fm_country:'País',fm_city:'Ciudad',fm_profile:'Perfil',fm_proc:'Trámite (ej. licencia de funcionamiento)',fm_consent:'Acepto recibir el checklist y comunicaciones de alaprima. Puedo darme de baja cuando quiera.',fm_send:'Enviarme el checklist',fm_ok:'Listo. Te enviamos el checklist por correo en menos de 24 horas.',fm_err:'Completa nombre, correo válido, país y acepta recibir el checklist.',
+q_k:'Preguntas',q_h:'Lo que nos preguntan.',fin_h:'Llega a la ventanilla con todo en regla.',fin_l:'Haz la autorrevisión gratis ahora. Si quieres el informe con revisión humana, lo tienes en 24 h.',
+foot_tag:'Aprobado a la primera.',foot_disc:'alaprima ofrece pre-revisión documental con IA y revisión humana. No es asesoría legal, no reemplaza a un profesional habilitado y no garantiza la aprobación, que depende de la autoridad competente.',foot_legal:'Términos · Privacidad',
+plan_btn:'Comprar',plan_btn_free:'Empezar gratis',per:'/mes',
+reg:{latam:'Latinoamérica',na:'EE.UU. y Canadá',eu:'Europa'},
+who:[['Arquitectos y estudios','Presentas varias licencias al año. Pre-revisa cada una y evita rondas que te comen margen.'],['Contratistas','ADUs, ampliaciones, remodelaciones. Entrega un submittal completo y empieza la obra antes.'],['Emprendedores','Vas a abrir tu restaurante, tienda o consultorio. Saca tu licencia sin idas y vueltas.'],['Gestores y contadores','Tramitas para tus clientes. Revisa en minutos y entrega más expedientes al mes.']],
+plans:[['Autorrevisión','Checklist interactivo de tu trámite.',['Checklist por ciudad','Puntaje de preparación','Informe descargable']],['Pre-check Local','Licencia de funcionamiento o de actividad.',['Lectura de documentos con IA','Revisión humana','Informe en 24 h']],['Pre-check Obra','Licencia de edificación, building permit, alvará o permis.',['Planos y memoria','Revisión humana','Informe en 24 h','1 re-revisión incluida']],['Pack Estudio','5 pre-checks de obra para estudios y contratistas.',['5 expedientes','Prioridad 12 h','Válido 6 meses']]],
+faq:[['¿Garantizan que me aprueben?','No. La aprobación la da la autoridad. Lo que hacemos es que llegues sin faltantes y con las observaciones más probables resueltas, que es lo que más demora los trámites.'],['¿Qué ciudades cubren?','Hoy: Lima, Ciudad de México, Bogotá, Madrid, São Paulo, Lisboa, ciudades de California, Texas y Florida, Francia (DP y permis de construire) y Quebec. Agregamos ciudades cada semana según la demanda.'],['¿Quién revisa?','La IA hace la primera lectura contra la norma local y un revisor con experiencia en trámites valida cada informe antes de enviarlo.'],['¿Qué pasa con mis planos?','Se usan solo para tu revisión. Puedes pedir que los borremos cuando quieras.'],['¿En qué idiomas?','Español, inglés, portugués y francés. El informe sale en el idioma que elijas.'],['¿Cómo pago?','Con tarjeta a través de Polar, que emite el comprobante y calcula los impuestos de tu país.']]},
+en:{qf_h:'Have another question?',qf_p:'Write to us and we’ll reply by email within 24 hours.',qf_q:'Your question',qf_send:'Send question',qf_ok:'We got your question. We’ll reply by email soon.',qf_err:'Enter a valid email and your question.',lg_terms:'Terms & Conditions',lg_priv:'Data Privacy',lg_ai:'AI Use & Regulation',foot_co:'alaprima is a product of',n2:'3.4 → 1.4',n4:'26.4%',st1:'of applications are accepted on the first round in Denver.',st2:'review cycles per application in Honolulu, before and after AI pre-checks.',st3:'average days to a decision in Honolulu after pre-checking applications.',st4:'of a new US home’s price is now regulatory cost.',st_src:'Data from US cities. In Lima, an application typically goes through 2–3 correction cycles; in France, since August 2026, an incomplete dossier can be refused outright. Sources:',solve:'Cities that pre-check with AI have cut corrections to a third. But only a handful of cities use it, and the tool belongs to City Hall. alaprima puts the same review in your hands, before you file, in any city and in your language.',nav_how:'How it works',nav_checks:'What we check',nav_pricing:'Pricing',nav_faq:'FAQ',menu:'Menu',cta_try:'Check my application free',cta_pricing:'See pricing',
+h1:'Approved on the first pass.',sub:'We review your permit or license application before you submit it. You see the corrections coming and fix them in time.',note:'Free self-check in 5 minutes. Human-reviewed report in 24 h.',tilecap:'A 1 that turns into a ✓: first round, approved.',
+p_k:'The problem',p_h:'Every correction is another round. Every round, weeks.',p_l:'Many applications come back for small things: a plan without a scale, an expired certificate, a missing signature. You find out after you’ve lost the round.',
+f1h:'Missing items',f1:'Documents left out, unsigned copies, outdated forms.',f2h:'Data that doesn’t match',f2:'Square footage on the plans doesn’t match the application.',f3h:'Code that changed',f3:'Updated requirements in the local code or submittal checklist.',
+h_k:'How it works',h_h:'Three steps before you hit submit.',s1h:'Upload your application',s1:'Pick your city and permit type. Upload plans, forms and certificates as PDF or photos.',s2h:'We check it against local rules',s2:'AI compares every document with local requirements and a human reviewer validates the report.',s3h:'Submit with everything in order',s3:'You get a list of missing items and likely corrections, ranked by urgency, with how to fix each one.',
+c_k:'What we check',c_h:'Your permit, in your city.',c_l:'We start with the permits that get the most corrections. If yours isn’t listed, tell us and we’ll add it.',
+r_k:'The report',r_h:'Clear, prioritized, actionable.',r_l:'Not a 40-page PDF. The exact list of what’s missing and what reviewers are likely to flag, with a readiness score for your application.',
+w_k:'Who it’s for',w_h:'For people who submit and don’t want to resubmit.',
+pr_k:'Pricing',pr_h:'Pay per application. No contracts.',pr_l:'Prices in US dollars, adjusted by region. Payments handled by Polar, with local taxes calculated at checkout.',
+pr_note:'The self-check is always free. Paid plans include AI reading of your documents and validation by a reviewer. alaprima does not replace a licensed professional’s stamp and approval is granted by the authority.',
+l_k:'Free checklist',l_h:'Get the official checklist for your permit.',l_l:'We’ll send you the up-to-date checklist for your city and permit type, with the most common corrections. Free.',
+fm_name:'Name',fm_email:'Email',fm_country:'Country',fm_city:'City',fm_profile:'Profile',fm_proc:'Permit type (e.g. ADU building permit)',fm_consent:'I agree to receive the checklist and emails from alaprima. I can unsubscribe at any time.',fm_send:'Send me the checklist',fm_ok:'Done. We’ll email you the checklist within 24 hours.',fm_err:'Add your name, a valid email and country, and accept to receive the checklist.',
+q_k:'FAQ',q_h:'What people ask us.',fin_h:'Walk up to the counter with everything in order.',fin_l:'Run the free self-check now. Want the human-reviewed report? You’ll have it in 24 h.',
+foot_tag:'Approved on the first pass.',foot_disc:'alaprima provides AI-assisted, human-reviewed document pre-checks. It is not legal advice, does not replace a licensed professional and does not guarantee approval, which depends on the competent authority.',foot_legal:'Terms · Privacy',
+plan_btn:'Buy',plan_btn_free:'Start free',per:'/mo',
+reg:{latam:'Latin America',na:'US & Canada',eu:'Europe'},
+who:[['Architects & studios','You submit several permits a year. Pre-check each one and skip the rounds that eat your margin.'],['Contractors','ADUs, additions, remodels. Turn in a complete submittal and break ground sooner.'],['Business owners','Opening a restaurant, shop or clinic? Get your license without the back-and-forth.'],['Permit expediters','You file for clients. Review in minutes and handle more applications per month.']],
+plans:[['Self-check','Interactive checklist for your permit.',['City-specific checklist','Readiness score','Downloadable report']],['Pre-check Business','Business license or certificate of occupancy.',['AI document reading','Human review','Report in 24 h']],['Pre-check Build','Building permit, ADU, alvará or permis.',['Plans and narrative','Human review','Report in 24 h','1 re-check included']],['Studio Pack','5 build pre-checks for studios and contractors.',['5 applications','12 h priority','Valid 6 months']]],
+faq:[['Do you guarantee approval?','No. The authority approves. We make sure you show up with nothing missing and the most likely corrections fixed, which is what slows permits down the most.'],['Which cities do you cover?','Today: California, Texas and Florida cities, Quebec, Mexico City, Bogotá, Lima, Madrid, São Paulo, Lisbon and France. We add cities weekly based on demand.'],['Who reviews?','AI does the first pass against local rules and a reviewer with permitting experience validates every report before it’s sent.'],['What happens to my plans?','They’re used only for your review. Ask us to delete them any time.'],['Which languages?','English, Spanish, Portuguese and French. Your report comes in the language you choose.'],['How do I pay?','By card through Polar, which issues the receipt and handles sales tax for your location.']]},
+pt:{qf_h:'Tem outra pergunta?',qf_p:'Escreva para nós e respondemos por e-mail em até 24 horas.',qf_q:'Sua pergunta',qf_send:'Enviar pergunta',qf_ok:'Recebemos sua pergunta. Responderemos por e-mail em breve.',qf_err:'Informe um e-mail válido e sua pergunta.',lg_terms:'Termos e condições',lg_priv:'Privacidade de dados',lg_ai:'Uso de IA e regulação',foot_co:'alaprima é um produto da',n2:'3,4 → 1,4',n4:'26,4%',st1:'dos pedidos são aceitos na primeira análise em Denver (EUA).',st2:'ciclos de revisão por pedido em Honolulu, antes e depois da pré-revisão com IA.',st3:'dias de tramitação em média em Honolulu após pré-revisar os processos.',st4:'do preço de uma casa nova nos EUA já é custo regulatório.',st_src:'Dados de cidades dos EUA. Em Lima, um processo costuma passar por 2 a 3 ciclos de exigências; na França, desde agosto de 2026, um dossiê incompleto pode ser indeferido diretamente. Fontes:',solve:'As cidades que revisam com IA já reduziram as exigências a um terço. Mas poucas cidades usam, e a ferramenta é da prefeitura. A alaprima coloca essa mesma revisão nas suas mãos, antes do protocolo, em qualquer cidade e no seu idioma.',nav_how:'Como funciona',nav_checks:'O que revisamos',nav_pricing:'Preços',nav_faq:'Perguntas',menu:'Menu',cta_try:'Revisar meu processo grátis',cta_pricing:'Ver preços',
+h1:'Aprovado de primeira.',sub:'Revisamos o seu processo de alvará ou licença antes de você protocolar. Você sabe quais exigências vão aparecer e resolve a tempo.',note:'Autorrevisão grátis em 5 minutos. Relatório com revisão humana em 24 h.',tilecap:'Um 1 que vira ✓: primeira análise, aprovado.',
+p_k:'O problema',p_h:'Cada exigência é mais uma rodada. Cada rodada, semanas.',p_l:'Muitos processos voltam por detalhes: planta sem escala, certidão vencida, assinatura que falta. Você só descobre depois de perder a rodada.',
+f1h:'Documentos faltando',f1:'Itens que ficaram de fora, cópias sem assinatura, formulários antigos.',f2h:'Dados que não batem',f2:'A área da planta não confere com o requerimento ou a matrícula.',f3h:'Norma que mudou',f3:'Requisitos atualizados no código de obras ou na legislação municipal.',
+h_k:'Como funciona',h_h:'Três passos antes de protocolar.',s1h:'Envie seu processo',s1:'Escolha a cidade e o tipo de alvará. Envie plantas, formulários e certidões em PDF ou foto.',s2h:'Conferimos com a norma',s2:'A IA compara cada documento com os requisitos locais e um revisor humano valida o relatório.',s3h:'Protocole com tudo certo',s3:'Você recebe a lista de pendências e exigências prováveis, por urgência, com como resolver cada uma.',
+c_k:'O que revisamos',c_h:'Seu alvará, na sua cidade.',c_l:'Começamos pelos processos com mais exigências. Se o seu não está aqui, fale com a gente e incluímos.',
+r_k:'O relatório',r_h:'Claro, priorizado, direto ao ponto.',r_l:'Não é um PDF de 40 páginas. É a lista exata do que falta e do que pode virar exigência, com o percentual de preparo do processo.',
+w_k:'Para quem',w_h:'Para quem protocola e não quer voltar.',
+pr_k:'Preços',pr_h:'Pague por processo. Sem contrato.',pr_l:'Preços em dólar, ajustados por região. Pagamento pela Polar, com cartão internacional e impostos calculados no checkout.',
+pr_note:'A autorrevisão é sempre grátis. Os planos pagos incluem leitura dos documentos com IA e validação de um revisor. A alaprima não substitui a ART/RRT de um profissional habilitado e a aprovação é da prefeitura.',
+l_k:'Checklist grátis',l_h:'Receba a lista oficial do seu processo.',l_l:'Enviamos o checklist atualizado da sua cidade e do seu alvará, com as exigências mais comuns. Sem custo.',
+fm_name:'Nome',fm_email:'E-mail',fm_country:'País',fm_city:'Cidade',fm_profile:'Perfil',fm_proc:'Processo (ex. alvará de funcionamento)',fm_consent:'Aceito receber o checklist e comunicações da alaprima. Posso cancelar quando quiser.',fm_send:'Quero o checklist',fm_ok:'Pronto. Enviaremos o checklist por e-mail em até 24 horas.',fm_err:'Preencha nome, e-mail válido e país, e aceite receber o checklist.',
+q_k:'Perguntas',q_h:'O que mais nos perguntam.',fin_h:'Chegue à prefeitura com tudo em ordem.',fin_l:'Faça a autorrevisão grátis agora. Quer o relatório com revisão humana? Em 24 h.',
+foot_tag:'Aprovado de primeira.',foot_disc:'A alaprima oferece pré-revisão documental com IA e revisão humana. Não é assessoria jurídica, não substitui um profissional habilitado e não garante a aprovação, que depende do órgão competente.',foot_legal:'Termos · Privacidade',
+plan_btn:'Comprar',plan_btn_free:'Começar grátis',per:'/mês',
+reg:{latam:'América Latina',na:'EUA e Canadá',eu:'Europa'},
+who:[['Arquitetos e escritórios','Você protocola vários projetos por ano. Pré-revise cada um e evite rodadas que comem sua margem.'],['Construtoras e empreiteiros','Ampliações, reformas, obras novas. Protocole completo e comece a obra antes.'],['Empreendedores','Vai abrir restaurante, loja ou consultório? Tire o alvará sem idas e vindas.'],['Despachantes e contadores','Você cuida de processos de clientes. Revise em minutos e atenda mais por mês.']],
+plans:[['Autorrevisão','Checklist interativo do seu processo.',['Checklist por cidade','Nota de preparo','Relatório para baixar']],['Pré-check Comércio','Alvará de funcionamento ou licença de atividade.',['Leitura dos documentos com IA','Revisão humana','Relatório em 24 h']],['Pré-check Obra','Alvará de construção, aprovação de projeto, permis.',['Plantas e memorial','Revisão humana','Relatório em 24 h','1 nova revisão incluída']],['Pacote Escritório','5 pré-checks de obra para escritórios e construtoras.',['5 processos','Prioridade 12 h','Válido por 6 meses']]],
+faq:[['Vocês garantem a aprovação?','Não. Quem aprova é a prefeitura. Nós fazemos você chegar sem pendências e com as exigências mais prováveis resolvidas, que é o que mais atrasa os processos.'],['Quais cidades vocês cobrem?','Hoje: São Paulo, Lisboa, Lima, Cidade do México, Bogotá, Madri, cidades da Califórnia, Texas e Flórida, França e Quebec. Incluímos cidades toda semana conforme a demanda.'],['Quem revisa?','A IA faz a primeira leitura contra a norma local e um revisor com experiência em aprovações valida cada relatório antes do envio.'],['E as minhas plantas?','São usadas só para a sua revisão. Você pode pedir a exclusão quando quiser.'],['Em quais idiomas?','Português, espanhol, inglês e francês. O relatório sai no idioma que você escolher.'],['Como pago?','Com cartão pela Polar, que emite o recibo e calcula os impostos do seu país.']]},
+fr:{qf_h:'Une autre question ?',qf_p:'Écrivez-nous, nous répondons par e-mail sous 24 heures.',qf_q:'Votre question',qf_send:'Envoyer la question',qf_ok:'Question bien reçue. Nous vous répondons par e-mail rapidement.',qf_err:'Indiquez un e-mail valide et votre question.',lg_terms:'Conditions générales',lg_priv:'Confidentialité des données',lg_ai:'Usage de l’IA et réglementation',foot_co:'alaprima est un produit de',n2:'3,4 → 1,4',n4:'26,4 %',st1:'des demandes sont acceptées au premier passage à Denver (États-Unis).',st2:'cycles d’instruction par demande à Honolulu, avant et après la pré-vérification par IA.',st3:'jours de délai moyen à Honolulu après pré-vérification des dossiers.',st4:'du prix d’une maison neuve aux États-Unis est désormais un coût réglementaire.',st_src:'Données de villes américaines. En France, depuis le 3 août 2026 (Conseil d’État n° 497092), un dossier incomplet peut être refusé sans demande de pièces préalable. Sources :',solve:'Les villes qui pré-vérifient avec l’IA ont divisé par trois les demandes de corrections. Mais peu de villes l’utilisent, et l’outil appartient à la mairie. alaprima met cette vérification entre vos mains, avant le dépôt, dans n’importe quelle commune et dans votre langue.',nav_how:'Fonctionnement',nav_checks:'Ce que nous vérifions',nav_pricing:'Tarifs',nav_faq:'Questions',menu:'Menu',cta_try:'Vérifier mon dossier gratuitement',cta_pricing:'Voir les tarifs',
+h1:'Approuvé du premier coup.',sub:'Nous relisons votre dossier de permis ou d’autorisation avant le dépôt. Vous savez quelles pièces on va vous demander et vous les corrigez à temps.',note:'Autocontrôle gratuit en 5 minutes. Rapport relu par un humain en 24 h.',tilecap:'Un 1 qui devient ✓ : premier passage, approuvé.',
+p_k:'Le problème',p_h:'Chaque pièce manquante, c’est un tour de plus. Et des semaines.',p_l:'Beaucoup de dossiers reviennent pour des détails : un plan sans échelle, une attestation périmée, une signature oubliée. On l’apprend quand le délai est déjà perdu.',
+f1h:'Pièces manquantes',f1:'Documents oubliés, copies non signées, formulaires Cerfa obsolètes.',f2h:'Données incohérentes',f2:'La surface du plan ne correspond pas au formulaire.',f3h:'Règles qui changent',f3:'Exigences mises à jour du PLU ou du règlement local.',
+h_k:'Fonctionnement',h_h:'Trois étapes avant le dépôt.',s1h:'Déposez votre dossier',s1:'Choisissez votre ville et le type d’autorisation. Ajoutez plans, formulaires et attestations en PDF ou photo.',s2h:'Nous le comparons aux règles',s2:'L’IA compare chaque pièce aux exigences locales et un relecteur humain valide le rapport.',s3h:'Déposez un dossier complet',s3:'Vous recevez la liste des pièces manquantes et des remarques probables, par priorité, avec la solution pour chacune.',
+c_k:'Ce que nous vérifions',c_h:'Votre autorisation, dans votre ville.',c_l:'Nous commençons par les démarches les plus souvent incomplètes. La vôtre n’y est pas ? Écrivez-nous, nous l’ajoutons.',
+r_k:'Le rapport',r_h:'Clair, hiérarchisé, utile.',r_l:'Pas un PDF de 40 pages. La liste exacte de ce qui manque et de ce qu’on risque de vous demander, avec un score de préparation du dossier.',
+w_k:'Pour qui',w_h:'Pour ceux qui déposent et ne veulent pas redéposer.',
+pr_k:'Tarifs',pr_h:'Payez par dossier. Sans engagement.',pr_l:'Prix en dollars US, ajustés par région. Paiement via Polar, carte internationale, TVA calculée selon votre pays.',
+pr_note:'L’autocontrôle reste gratuit. Les offres payantes incluent la lecture de vos pièces par IA et la validation d’un relecteur. alaprima ne remplace pas un architecte lorsque son recours est obligatoire, et la décision appartient à la mairie.',
+l_k:'Checklist gratuite',l_h:'Recevez la liste officielle de votre démarche.',l_l:'Nous vous envoyons la checklist à jour pour votre commune et votre type de dossier, avec les demandes de pièces les plus fréquentes. Gratuit.',
+fm_name:'Nom',fm_email:'E-mail',fm_country:'Pays',fm_city:'Ville',fm_profile:'Profil',fm_proc:'Démarche (ex. déclaration préalable)',fm_consent:'J’accepte de recevoir la checklist et les e-mails d’alaprima. Je peux me désinscrire à tout moment.',fm_send:'Recevoir la checklist',fm_ok:'C’est noté. Nous vous envoyons la checklist par e-mail sous 24 heures.',fm_err:'Indiquez votre nom, un e-mail valide et votre pays, puis acceptez de recevoir la checklist.',
+q_k:'Questions',q_h:'Ce qu’on nous demande.',fin_h:'Déposez un dossier complet du premier coup.',fin_l:'Faites l’autocontrôle gratuit maintenant. Le rapport relu par un humain arrive en 24 h.',
+foot_tag:'Approuvé du premier coup.',foot_disc:'alaprima propose une pré-vérification documentaire assistée par IA et relue par un humain. Ce n’est pas un conseil juridique, cela ne remplace pas un professionnel habilité et ne garantit pas l’obtention de l’autorisation, qui relève de l’autorité compétente.',foot_legal:'Conditions · Confidentialité',
+plan_btn:'Acheter',plan_btn_free:'Commencer gratuitement',per:'/mois',
+reg:{latam:'Amérique latine',na:'États-Unis et Canada',eu:'Europe'},
+who:[['Architectes et agences','Vous déposez plusieurs dossiers par an. Pré-vérifiez chacun et évitez les allers-retours qui mangent votre marge.'],['Maîtres d’œuvre et artisans','Extensions, rénovations, maisons individuelles. Déposez complet et démarrez plus tôt.'],['Entrepreneurs','Vous ouvrez un restaurant, une boutique, un cabinet ? Obtenez vos autorisations sans va-et-vient.'],['Mandataires et comptables','Vous montez des dossiers pour vos clients. Vérifiez en quelques minutes et traitez-en davantage.']],
+plans:[['Autocontrôle','Checklist interactive de votre démarche.',['Checklist par commune','Score de préparation','Rapport téléchargeable']],['Pré-check Commerce','Ouverture d’un ERP ou autorisation d’activité.',['Lecture des pièces par IA','Relecture humaine','Rapport en 24 h']],['Pré-check Travaux','Déclaration préalable ou permis de construire.',['Plans PCMI et notice','Relecture humaine','Rapport en 24 h','1 nouvelle vérification incluse']],['Pack Agence','5 pré-checks travaux pour agences et maîtres d’œuvre.',['5 dossiers','Priorité 12 h','Valable 6 mois']]],
+faq:[['Garantissez-vous l’approbation ?','Non. C’est la mairie qui décide. Nous faisons en sorte que votre dossier arrive complet, avec les remarques les plus probables déjà traitées : c’est ce qui allonge le plus les délais.'],['Quelles villes couvrez-vous ?','Aujourd’hui : la France (DP et permis de construire), le Québec, la Belgique, ainsi que Lima, Mexico, Bogotá, Madrid, São Paulo, Lisbonne et plusieurs villes américaines. Nous ajoutons des communes chaque semaine.'],['Qui relit ?','L’IA fait une première lecture selon les règles locales et un relecteur expérimenté valide chaque rapport avant l’envoi.'],['Que deviennent mes plans ?','Ils servent uniquement à votre vérification. Vous pouvez demander leur suppression à tout moment.'],['Dans quelles langues ?','Français, anglais, espagnol et portugais. Le rapport est rédigé dans la langue de votre choix.'],['Comment payer ?','Par carte via Polar, qui émet le reçu et calcule la TVA de votre pays.']]}
+};
+const MQ=['Licencia de funcionamiento <i>Lima</i>','ADU building permit <i>Los Angeles</i>','Permis de construire <i>Lyon</i>','Alvará de construção <i>São Paulo</i>','Licencia de construcción <i>Bogotá</i>','Déclaration préalable <i>Bordeaux</i>','Manifestación de construcción <i>CDMX</i>','Residential remodel <i>Houston</i>','Licencia de obra <i>Madrid</i>','Permis de transformation <i>Montréal</i>','Licença de utilização <i>Lisboa</i>','Business license <i>Miami</i>'];
+const PRICES={latam:[0,29,59,199],na:[0,49,99,349],eu:[0,49,99,349]};
+const KEYS=['free','local','obra','pack'];
+const COUNTRIES=[['US','United States'],['FR','France'],['ES','España'],['CA','Canada'],['MX','México'],['CO','Colombia'],['PE','Perú'],['CL','Chile'],['BR','Brasil'],['PT','Portugal'],['BE','Belgique'],['CH','Suisse'],['AR','Argentina'],['OT','Other / Otro']];
+const PROFILES={es:['Arquitecto/a o estudio','Contratista o constructora','Emprendedor/a','Gestor/a o contador/a','Municipalidad','Otro'],en:['Architect or studio','Contractor or builder','Business owner','Expediter or accountant','City / municipality','Other'],pt:['Arquiteto(a) ou escritório','Construtora ou empreiteiro','Empreendedor(a)','Despachante ou contador(a)','Prefeitura','Outro'],fr:['Architecte ou agence','Maître d’œuvre ou artisan','Entrepreneur','Mandataire ou comptable','Mairie','Autre']};
+const CHECKS={
+ lima:{t:'Lima · Perú',items:{es:['Formato de solicitud / declaración jurada vigente','RUC activo y DNI del representante','Vigencia de poder (si es persona jurídica)','Declaración jurada de condiciones de seguridad (riesgo bajo o medio)','Compatibilidad de uso con la zonificación','Plano de ubicación con escala y norte','Pago del derecho de trámite'],en:['Current application form / sworn statement','Active RUC and representative ID','Power of attorney (legal entities)','Safety conditions sworn statement (low/medium risk)','Zoning use compatibility','Location plan with scale and north arrow','Fee payment'],pt:['Formulário de solicitação / declaração vigente','RUC ativo e documento do representante','Procuração (pessoa jurídica)','Declaração de condições de segurança (risco baixo/médio)','Compatibilidade de uso com o zoneamento','Planta de localização com escala e norte','Pagamento da taxa'],fr:['Formulaire de demande / déclaration sur l’honneur','RUC actif et pièce d’identité du représentant','Pouvoir du représentant (personne morale)','Déclaration des conditions de sécurité (risque faible/moyen)','Compatibilité d’usage avec le zonage','Plan de situation avec échelle et nord','Paiement des droits']},obs:{es:'El área declarada en el formulario no coincide con el plano.',en:'The area on the form doesn’t match the plan.',pt:'A área declarada no formulário não bate com a planta.',fr:'La surface déclarée ne correspond pas au plan.'}},
+ us:{t:'California · Texas · Florida',items:{es:['Formulario de solicitud del condado/ciudad','Site plan con retiros (setbacks) acotados','Plantas, elevaciones y cortes a escala','Cálculos estructurales firmados cuando aplica','Cumplimiento energético (Title 24 en CA)','Detectores de humo y CO, ventanas de egreso','Datos de licencia del contratista'],en:['City/county application form','Site plan with dimensioned setbacks','Floor plans, elevations and sections to scale','Stamped structural calcs where required','Energy compliance (Title 24 in CA)','Smoke/CO detectors and egress windows','Contractor license details'],pt:['Formulário da cidade/condado','Site plan com recuos cotados','Plantas, elevações e cortes em escala','Cálculo estrutural assinado quando exigido','Conformidade energética (Title 24 na CA)','Detectores de fumaça/CO e janelas de saída','Dados da licença do empreiteiro'],fr:['Formulaire de la ville ou du comté','Plan masse avec reculs cotés','Plans, façades et coupes à l’échelle','Calculs de structure signés si requis','Conformité énergétique (Title 24 en Californie)','Détecteurs fumée/CO et fenêtres d’évacuation','Licence de l’entrepreneur']},obs:{es:'Falta acotar el retiro lateral del ADU respecto al lindero.',en:'Side setback from the ADU to the property line isn’t dimensioned.',pt:'Falta cotar o recuo lateral do ADU até a divisa.',fr:'Le recul latéral de l’ADU par rapport à la limite n’est pas coté.'}},
+ fr:{t:'France · DP / PC',items:{es:['Formulario Cerfa correcto (DP o PCMI)','PCMI1 plano de situación','PCMI2 plano de masa','PCMI3 corte del terreno','PCMI4 memoria descriptiva','PCMI5 fachadas y cubiertas','PCMI6 inserción gráfica, PCMI7 y PCMI8 fotos'],en:['Correct Cerfa form (DP or PCMI)','PCMI1 location plan','PCMI2 site plan','PCMI3 cross-section','PCMI4 descriptive notice','PCMI5 façades and roofs','PCMI6 visual insertion, PCMI7/8 photos'],pt:['Formulário Cerfa correto (DP ou PCMI)','PCMI1 planta de situação','PCMI2 planta de implantação','PCMI3 corte do terreno','PCMI4 memorial descritivo','PCMI5 fachadas e coberturas','PCMI6 inserção gráfica, PCMI7/8 fotos'],fr:['Bon formulaire Cerfa (DP ou PCMI)','PCMI1 plan de situation','PCMI2 plan de masse','PCMI3 plan en coupe','PCMI4 notice descriptive','PCMI5 plans des façades et toitures','PCMI6 insertion graphique, PCMI7 et PCMI8 photos']},obs:{es:'Las fotos PCMI7/PCMI8 no se ubican en el plano de masa.',en:'PCMI7/PCMI8 photo viewpoints aren’t marked on the site plan.',pt:'Os pontos das fotos PCMI7/PCMI8 não estão na planta de implantação.',fr:'Les angles de prise de vue PCMI7/PCMI8 ne figurent pas sur le plan de masse.'}},
+ br:{t:'São Paulo · Brasil',items:{es:['Requerimiento firmado','ART/RRT del responsable técnico','Matrícula actualizada del inmueble','IPTU / registro catastral','Proyecto arquitectónico simplificado','Memorial descriptivo','Tasas pagadas'],en:['Signed application','ART/RRT of the responsible professional','Updated property registration (matrícula)','IPTU / cadastral record','Simplified architectural project','Descriptive memorial','Fees paid'],pt:['Requerimento assinado','ART/RRT do responsável técnico','Matrícula atualizada do imóvel','IPTU / cadastro','Projeto arquitetônico simplificado','Memorial descritivo','Taxas pagas'],fr:['Demande signée','ART/RRT du responsable technique','Matrícula à jour du bien','IPTU / cadastre','Projet architectural simplifié','Notice descriptive','Taxes payées']},obs:{es:'La matrícula tiene más de 30 días de emitida.',en:'The property registration is more than 30 days old.',pt:'A matrícula foi emitida há mais de 30 dias.',fr:'La matrícula date de plus de 30 jours.'}},
+ cdmx:{t:'CDMX · Bogotá · Madrid',items:{es:['Formato oficial del trámite','Certificado de uso de suelo / zonificación vigente','Constancia de alineamiento y número oficial (CDMX)','Responsiva del DRO / profesional habilitado','Certificado de tradición y libertad reciente (Bogotá)','Proyecto básico firmado (Madrid)','Pago de derechos o tasas'],en:['Official application form','Current zoning / land-use certificate','Alignment and official number record (CDMX)','Licensed professional of record sign-off','Recent title certificate (Bogotá)','Signed basic project (Madrid)','Fees paid'],pt:['Formulário oficial','Certidão de uso do solo vigente','Alinhamento e número oficial (CDMX)','Responsável técnico habilitado','Certidão de matrícula recente (Bogotá)','Projeto básico assinado (Madri)','Taxas pagas'],fr:['Formulaire officiel','Certificat d’usage du sol à jour','Alignement et numéro officiel (Mexico)','Signature du professionnel habilité','Certificat de propriété récent (Bogotá)','Projet de base signé (Madrid)','Taxes payées']},obs:{es:'El certificado de uso de suelo venció antes de la fecha de ingreso.',en:'The land-use certificate expires before the filing date.',pt:'A certidão de uso do solo vence antes do protocolo.',fr:'Le certificat d’usage du sol expire avant la date de dépôt.'}}
+};
+let LANG='es',REG='latam';
+const t=k=>I18N[LANG][k]??I18N.es[k];
+function okIcon(){return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#12A06B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>'}
+function render(){
+ document.documentElement.lang=LANG;
+ document.querySelectorAll('[data-i]').forEach(e=>{const v=t(e.dataset.i);if(typeof v==='string')e.textContent=v});
+ document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.l===LANG));
+ document.querySelectorAll('.app-link').forEach(a=>a.href='app.html?lang='+LANG);
+ document.querySelectorAll('.lg-link').forEach(a=>a.href='legal.html?lang='+LANG+'#'+a.dataset.h);
+ document.getElementById('mailWrap').innerHTML=CFG.CONTACT_EMAIL?` · <a href="mailto:${CFG.CONTACT_EMAIL}">${CFG.CONTACT_EMAIL}</a>`:'';
+ AP_CORE.setLang(LANG);
+ // who
+ const icons=['<path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/>','<path d="M2 20h20M6 20v-6h12v6M9 14V9h6v5M12 9V4"/>','<path d="M4 10l2-6h12l2 6M5 10v10h14V10M4 10h16M10 20v-5h4v5"/>','<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 13h5M10 17h5"/>'];
+ document.getElementById('who').innerHTML=t('who').map((w,i)=>`<article><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2340D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icons[i]}</svg><h3>${w[0]}</h3><p>${w[1]}</p></article>`).join('');
+ // regions
+ const R=t('reg');document.getElementById('reg').innerHTML=Object.keys(R).map(k=>`<button data-r="${k}" aria-pressed="${k===REG}">${R[k]}</button>`).join('');
+ document.querySelectorAll('#reg button').forEach(b=>b.onclick=()=>{REG=b.dataset.r;render()});
+ const P=PRICES[REG];
+ document.getElementById('plans').innerHTML=t('plans').map((p,i)=>`<div class="plan ${i===2?'f':''}"><h3>${p[0]}</h3><p>${p[1]}</p><div class="pr">${P[i]===0?(LANG==='fr'?'0 $':'$0'):(LANG==='fr'?P[i]+' $':'$'+P[i])}</div><p></p><ul>${p[2].map(x=>`<li>${x}</li>`).join('')}</ul><a class="btn ${i===2?'':'ghost'}" href="${i===0?'app.html?lang='+LANG:'#pricing'}" data-plan="${i}">${i===0?t('plan_btn_free'):t('plan_btn')}</a></div>`).join('');
+ document.querySelectorAll('[data-plan]').forEach(a=>a.onclick=ev=>{const i=+a.dataset.plan;if(i===0)return;ev.preventDefault();AP_CORE.checkout(AP_CORE.productFor(['','local','obra','pack'][i],REG==='latam'?'latam':'global'),{procedure:a.closest('.plan').querySelector('h3').textContent})});
+ // tabs
+ const keys=Object.keys(CHECKS);
+ document.getElementById('tabs').innerHTML=keys.map((k,i)=>`<button role="tab" aria-selected="${i===0}" data-k="${k}">${CHECKS[k].t}</button>`).join('');
+ const showTab=k=>{document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.k===k));const c=CHECKS[k];
+  document.getElementById('tp').innerHTML=`<ul class="list">${c.items[LANG].map(x=>`<li>${okIcon()}<span>${x}</span></li>`).join('')}</ul><div class="obs"><h4>${{es:'Observación frecuente',en:'Common correction',pt:'Exigência comum',fr:'Demande fréquente'}[LANG]}</h4><p style="font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.3;margin:0"><span class="hl">${c.obs[LANG]}</span></p><p style="color:var(--t2);font-size:15.5px">${{es:'alaprima la detecta antes de que la detecte el revisor municipal.',en:'alaprima flags it before the plan reviewer does.',pt:'A alaprima aponta antes do analista da prefeitura.',fr:'alaprima la repère avant l’instructeur.'}[LANG]}</p></div>`};
+ document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.k));showTab(keys[0]);
+ // paper
+ const PP={es:['Informe de pre-revisión','Licencia de funcionamiento · Miraflores, Lima','Preparación 68%','Faltante','Vigencia de poder del representante','Faltante','Declaración jurada de condiciones de seguridad','Probable','El área declarada (86 m²) no coincide con el plano (92 m²)','Completo','RUC activo, DNI, plano de ubicación'],en:['Pre-check report','ADU building permit · Los Angeles, CA','Readiness 68%','Missing','Stamped structural calculations','Missing','Title 24 energy compliance forms','Likely','Side setback to property line not dimensioned','Complete','Site plan, floor plans, elevations'],pt:['Relatório de pré-revisão','Alvará de funcionamento · São Paulo','Preparo 68%','Pendente','Procuração do representante','Pendente','Auto de vistoria do Corpo de Bombeiros (AVCB/CLCB)','Provável','Área declarada (86 m²) não bate com a planta (92 m²)','Completo','CNPJ, IPTU, planta de localização'],fr:['Rapport de pré-vérification','Déclaration préalable · Lyon','Préparation 68 %','Manquant','PCMI6 document d’insertion graphique','Manquant','PCMI8 photo de l’environnement lointain','Probable','Hauteur au faîtage absente du plan de coupe','Complet','Cerfa, plan de situation, plan de masse']}[LANG];
+ document.getElementById('paper').innerHTML=`<div class="hd"><span>${AP.logo('hz','pos')}</span><span>AP-2026-0142</span></div><b style="font-size:22px;letter-spacing:-.02em">${PP[0]}</b><div style="color:var(--t2)">${PP[1]}</div><div class="meter"><i></i></div><div style="font-size:14px;color:var(--t2);margin-bottom:10px">${PP[2]}</div>
+ <div class="item"><span class="st m">${PP[3]}</span><span>${PP[4]}</span></div><div class="item"><span class="st m">${PP[5]}</span><span>${PP[6]}</span></div><div class="item"><span class="st p">${PP[7]}</span><span>${PP[8]}</span></div><div class="item"><span class="st ok">${PP[9]}</span><span>${PP[10]}</span></div><div class="stamp"><div>${{es:'REVISADO',en:'REVIEWED',pt:'REVISADO',fr:'VÉRIFIÉ'}[LANG]}<br><span style="font-size:24px">✓</span><br>ALAPRIMA</div></div>`;
+ // faq
+ document.getElementById('faqs').innerHTML=t('faq').map(f=>`<details><summary>${f[0]}</summary><p>${f[1]}</p></details>`).join('');
+ // form selects
+ document.getElementById('countrySel').innerHTML='<option value=""></option>'+AP_CORE.COUNTRIES.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join('');
+ document.getElementById('profileSel').innerHTML=PROFILES[LANG].map(p=>`<option>${p}</option>`).join('');
+ // dimension graphic
+ const dimTxt={es:['Sin pre-revisión: 3 rondas','Con alaprima: 1 ronda'],en:['Without a pre-check: 3 rounds','With alaprima: 1 round'],pt:['Sem pré-revisão: 3 rodadas','Com alaprima: 1 rodada'],fr:['Sans pré-vérification : 3 tours','Avec alaprima : 1 tour']}[LANG];
+ document.getElementById('dim').innerHTML=`<svg viewBox="0 0 1000 190" role="img" aria-label="${dimTxt.join('. ')}"><g stroke="#C9D1E4" stroke-width="2" fill="none"><path d="M0 50H1000M0 32v36M333 32v36M666 32v36M1000 32v36"/></g><g fill="#D93A3A"><rect x="300" y="44" width="33" height="12"/><rect x="633" y="44" width="33" height="12"/></g><text x="0" y="22" fill="#C9D1E4" font-size="18" font-family="inherit">${dimTxt[0]}</text><g stroke="#F4E04D" stroke-width="3" fill="none"><path d="M0 140H333M0 122v36M333 122v36"/></g><path d="M0 140l14-7v14zM333 140l-14-7v14z" fill="#F4E04D"/><text x="0" y="112" fill="#F4E04D" font-size="18" font-weight="700" font-family="inherit">${dimTxt[1]}</text></svg>`;
+ try{localStorage.setItem('ap_lang',LANG)}catch(e){}
+}
+function toggleNav(b){const n=document.getElementById('nav');const o=n.classList.toggle('open');b.setAttribute('aria-expanded',o)}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{LANG=b.dataset.l;history.replaceState(null,'','?lang='+LANG+location.hash);render()});
+document.getElementById('nav').addEventListener('click',e=>{if(e.target.tagName==='A')document.getElementById('nav').classList.remove('open')});
+// lead form -> base de datos (Firestore o modo local)
+function showMsg(el,txt,bad){el.style.display='block';el.style.background=bad?'#FBE9E9':'';el.style.color=bad?'#9B1C1C':'';el.textContent=txt}
+document.getElementById('leadForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f));const ok=document.getElementById('okMsg');const b=f.querySelector('button');
+ if(!d.name||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email||'')||!d.country||!d.consent){showMsg(ok,t('fm_err'),1);return}
+ b.disabled=true;try{await AP_CORE.saveLead({...d,consent:true,source:'landing-checklist'});showMsg(ok,t('fm_ok'));f.reset()}catch(err){showMsg(ok,AP_CORE.errMsg(err),1)}finally{b.disabled=false}});
+document.getElementById('qForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f));const ok=document.getElementById('qOk');const b=f.querySelector('button');
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email||'')||!String(d.question||'').trim()){showMsg(ok,t('qf_err'),1);return}
+ b.disabled=true;try{await AP_CORE.saveQuestion(d);showMsg(ok,t('qf_ok'));f.reset()}catch(err){showMsg(ok,AP_CORE.errMsg(err),1)}finally{b.disabled=false}});
+// init
+(function(){const q=new URLSearchParams(location.search).get('lang');let s=null;try{s=localStorage.getItem('ap_lang')}catch(e){}
+ const n=(navigator.language||'es').slice(0,2);LANG=[q,s,n].find(x=>x&&I18N[x])||'es';
+ if(LANG==='en')REG='na';if(LANG==='fr')REG='eu';
+ document.getElementById('mq').innerHTML=[...MQ,...MQ].map(x=>`<span>${x}</span>`).join('');
+ document.getElementById('tile').innerHTML=AP.svg(100,100,`<path d="${AP.tile}" fill="#2340D8"/><path d="${AP.fold}" fill="#F4E04D"/>${AP.check('#fff','morph')}`);
+ renderLogos();render();AP_CORE.mountAccount(document.getElementById('acct'));AP_CORE.onAuth(u=>{if(u)document.querySelectorAll('[name=email]').forEach(i=>{if(!i.value)i.value=u.email})})})();
+</script>
+</body>
+</html>
